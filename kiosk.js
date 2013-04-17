@@ -12,7 +12,11 @@ function writeGooglePlusEvents(data, elem)
     {
       for (var a=0; a<attach.length; a++)
       {
-        if ( attach[a].objectType == "photo")
+        if ( attach[a].objectType == "album")
+        {
+          noteimg = attach[a].thumbnails[0].image.url;
+        }
+        else if ( attach[a].objectType == "photo")
         {
           noteimg = attach[a].image.url;
         }
