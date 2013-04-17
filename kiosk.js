@@ -23,7 +23,7 @@ function writeGooglePlusEvents(data, elem)
       }
     }
     ghtml += '<div class="gpluspost">'
-    ghtml += '<img class="gplusactor" src="'+item.actor.image.url+'"/><p class="gplustimestamp">'+item.updated+'</p>';
+    ghtml += '<img class="gplusactor" src="'+item.actor.image.url+'"/><p class="gplustimestamp">'+item.updated.substring(0,16).replace("T"," ")+'</p>';
     ghtml += '<p class="gplustxt">'+notetxt+'</p>';
     if (noteimg)
     {
@@ -106,7 +106,7 @@ function writeAnwesenheitStatus(data)
     {
       $.each( data.sensors[s], function(stype, std){
         $.each( std, function(swhere, svalue){
-           sensorstd+='<td style="background-color:white; height:42px; text-align:center; vertical-align:middle; display:table-cell;"><b>'+stype+'</b><br/>'+swhere+': '+svalue+'</td>';
+           sensorstd+='<td class="sensorstatus"><b>'+stype+'</b><br/>'+swhere+': '+svalue+'</td>';
         });
       });
     }

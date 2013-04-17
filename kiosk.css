@@ -115,11 +115,19 @@ td.anwesenheitsstatus {
   font-size:30px;
 }
 
+td.sensorstatus{
+  height:42px; 
+  text-align:center;
+  vertical-align:middle;
+  display:table-cell;
+  background-color:#f2f2f2;
+}
+
 div.sensorelem {
   display:block;
   width:397px;
-  margin-top:2px;
-  margin-bottom:0;
+  margin-top:0;
+  margin-bottom:6px;
   margin-left:auto;
   margin-right:auto;
 }
@@ -140,32 +148,45 @@ div.gpluswall {
 
 div.gpluspost {
   display:block;
-  width: 495px;
-  border-bottom:1px solid gray;
-  margin-top:0px;
-  margin-bottom:5px;
+  width: 497px;
+  margin-left:0;
+  margin-right:0;
+  border-top:1px solid #333;
+  margin-top:0;
+  margin-bottom:6px;
+  background-color:#f2f2f2;
 }
 img.gplusactor {
-  margin:4px;
+  margin-left:2px;
+  margin-bottom:0px;
+  margin-right:4px;
+  margin-top:4px;
   display:inline;
   float:left;
 }
 p.gplustimestamp {
   display:inline;
   float: right;
-  margin-left:auto;
-  margin-right:8px;
+  margin-top:0;
+  padding:4 14 4 14;
+  margin-left:4px;
+  margin-bottom:4px;
+  margin-right:0;
   font-size:9pt;
+  color:white;
+  background-color: #333;
 }
 p.gplusimg {
   display:block;
-  margin-top:2px;
-  margin-bottom: 4px;
-  overflow: hidden;
-  max-height:300px;
+  margin-left:0;
+  margin-top:6px;
+  margin-bottom:0;
+  margin-right:0;
+  overflow:hidden;
+  max-height:275px;
 }
-p.gplusimg {
-  width:495px;
+img.gplusimg {
+  width:497px;
 }
 p.gplustxt {
   display:block;
