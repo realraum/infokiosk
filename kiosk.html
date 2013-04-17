@@ -4,6 +4,7 @@
   <title>Realraum Kiosk Seite</title>
   <script src="/jquery.min.js"></script>
   <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script-->
+  <script type="text/javascript" src="gplusapikey.js"></script>
   <script type="text/javascript" src="kiosk.js"></script>
   <link rel="stylesheet" href="kiosk.css" type="text/css" />
  </head>
@@ -13,19 +14,13 @@
   <div id="headerphoto" class="headerphoto">
   <img class="headerphoto" src="http://realraum.at/wiki/lib/exe/fetch.php?media=xro:realraum_hdr.jpg"></img>
   </div>
-  <div class="calendars">
-   <div class="calendar" style="float:left;">
+  <div class="calendar" style="float:left;">
     <p class="topic">Upcoming Events</p>
     <div id="grical_upcoming">Loading calendar ...</div>
-   </div>
-   <!--div class="calendar" style="float:right;">
-    <p class="topic">Previous Events</p>
-    <div id="grical_previous">Loading Old Events ...</div>
-   </div-->
   </div>
-  <!-- Door and Presence Status ------------------------ -->
-  <br/>
    <!-- Sensor Data ------------------------ -->
+ <table border="0" cellpadding="0" cellspacing="0"><tr>
+ <td style="vertical-align:top;">
   <div class="sensorgraphs">
     <p class="topic">Sensor Data</p>
     <div class="sensorelem">
@@ -34,9 +29,9 @@
     <tr><td id="sensor_status" style="border:1px solid black; margin-top:5px;">Loading ...</td></tr>
     </table>
     </div>
-    <!--div class="sensorelem">
+    <div class="sensorelem">
      <img id="tempsensor" class="sensorimg" src="http://realraum.at/get_sensor.php?sensor=temp"/>
-    </div-->
+    </div>
     <div class="sensorelem">
       <img id="lightsensor" class="sensorimg" src="http://realraum.at/get_sensor.php?sensor=light"/>
     </div>
@@ -44,5 +39,14 @@
       <img id="movementsensor" class="sensorimg" src="http://realraum.at/get_sensor.php?sensor=movement"/>
     </div>
   </div>
+  
+  </td><td style="vertical-align:top;">
+
+   <div class="gpluswall">
+    <p class="topic">Google+</p>
+    <div id="gplusevents">G Plus Events</div>
+   </div>
+  </td></tr>
+  </table>
 </body>
 </html>

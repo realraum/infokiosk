@@ -1,3 +1,50 @@
+function writeGooglePlusEvents(data, elem)
+{
+  var ghtml = "";
+  for (var i=0; i< data.items.length; i++)
+  {
+    var item = data.items[i];
+    var noteobj = item.object;
+    var attach = noteobj.attachments;
+    var notetxt = noteobj.content;
+    var noteimg = false;
+    if (attach)
+    {
+      for (var a=0; a<attach.length; a++)
+      {
+        if ( attach[a].objectType == "photo")
+        {
+          noteimg = attach[a].image.url;
+        }
+        else if (attach[a].objectType == "event")
+        {
+          notetxt = "<b>" + attach[a].displayName+"</b><br/>"+notetxt;
+        }
+      }
+    }
+    ghtml += '<div class="gpluspost">'
+    ghtml += '<img class="gplusactor" src="'+item.actor.image.url+'"/><p class="gplustimestamp">'+item.updated+'</p>';
+    ghtml += '<p class="gplustxt">'+notetxt+'</p>';
+    if (noteimg)
+    {
+      ghtml += '<p class="gplusimg"><img class="gplusimg" src="'+noteimg+'"/></p>';
+    }
+    ghtml += '</div>';
+  }
+  elem.innerHTML=ghtml;
+}
+
+
+function loadGooglePlusEvents()
+{
+  var gplusuri = "https://www.googleapis.com/plus/v1/people/113737596421797426873/activities/public?maxResults=3&key="+gplusapikey;
+  var gpluscontainer=document.getElementById("gplusevents");
+  gpluscontainer.innerHTML="Plus loading ...";
+  $.getJSON(gplusuri, function(data){
+    writeGooglePlusEvents(data, gpluscontainer);
+  });
+}
+
 
 function writeCalendar(data, elem)
 {
@@ -19,7 +66,7 @@ function writeCalendar(data, elem)
         }
         when = data[s].start +", "+stime+" Uhr";
       }
-      calhtml += '<li class="level1"><div class="li">'+when+' - <a href="'+data[s].url+'" class="urlextern" title="'+data[s].title+'"  rel="nofollow">'+data[s].title+'</a></div></li>'+"\n";
+      calhtml += '<li class="level1"><span class="r3red">'+when+'</span> - '+data[s].title+'</li>'+"\n";
     }
     elem.innerHTML='<ul>'+calhtml+'</ul>';
 }
@@ -83,7 +130,7 @@ var anwesenheit_timer = window.setInterval("updateAnwesenheitStatus()", 10000);
 
 function updateSensors()
 {
-  //reloadImg(document.getElementById("tempsensor"));
+  reloadImg(document.getElementById("tempsensor"));
   reloadImg(document.getElementById("movementsensor"));
   reloadImg(document.getElementById("lightsensor"));
 }
@@ -98,9 +145,11 @@ $(document).ready(function()
   setInterval("clock()", 500);
   updateAnwesenheitStatus();
   loadCalendar();
+  loadGooglePlusEvents();
   setInterval("updateAnwesenheitStatus()", 10000);
   setInterval("loadCalendar()", 100000);
   setInterval("updateSensors()", 50000);
+  setInterval("loadGooglePlusEvents()", 3600*1000);
 });
 
 function updateDateClock(now)
@@ -156,6 +205,7 @@ function reloadImg(element)
         var new_image = new Image();
         //set up the new image
         new_image.id = element.id;
+        new_image.className = element.className;
         new_image.src = element.src;
         element.parentNode.insertBefore(new_image,element);
         element.parentNode.removeChild(element);
