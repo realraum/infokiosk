@@ -37,7 +37,8 @@ function writeGooglePlusEvents(data, elem)
 
 function loadGooglePlusEvents()
 {
-  var gplusuri = "https://www.googleapis.com/plus/v1/people/113737596421797426873/activities/public?maxResults=3&key="+gplusapikey;
+  var gpak = "AIzaSyD9xBFM-KWwSYBgZ8VzftJ5wYYvurOxEHg";
+  var gplusuri = "https://www.googleapis.com/plus/v1/people/113737596421797426873/activities/public?maxResults=4&key="+gpak;
   var gpluscontainer=document.getElementById("gplusevents");
   gpluscontainer.innerHTML="Plus loading ...";
   $.getJSON(gplusuri, function(data){
@@ -64,9 +65,10 @@ function writeCalendar(data, elem)
         {
           stime=stime.substring(0,stime.length-3);
         }
-        when = data[s].start +", "+stime+" Uhr";
+        if (stime.length <= 2) { stime+="h"; }
+        when = data[s].start.substring(8,10)+"."+data[s].start.substring(5,7) +", "+stime;
       }
-      calhtml += '<li class="level1"><span class="r3red">'+when+'</span> - '+data[s].title+'</li>'+"\n";
+      calhtml += '<li class="level1">'+when+' - <span class="r3red">'+data[s].title+'</span></li>'+"\n";
     }
     elem.innerHTML='<ul>'+calhtml+'</ul>';
 }
