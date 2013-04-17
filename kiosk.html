@@ -1,0 +1,48 @@
+<html>
+  <head>
+  <meta charset="utf-8">
+  <title>Realraum Kiosk Seite</title>
+  <script src="/jquery.min.js"></script>
+  <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script-->
+  <script type="text/javascript" src="kiosk.js"></script>
+  <link rel="stylesheet" href="kiosk.css" type="text/css" />
+ </head>
+ <body>
+  <div id="dateclock"></div>
+  <div id="siteheader"><span style="font-size:110%;">realraum</span> - Verein für Technik &amp; Kultur</div>
+  <div id="headerphoto" class="headerphoto">
+  <img class="headerphoto" src="http://realraum.at/wiki/lib/exe/fetch.php?media=xro:realraum_hdr.jpg"></img>
+  </div>
+  <div class="calendars">
+   <div class="calendar" style="float:left;">
+    <p class="topic">Upcoming Events</p>
+    <div id="grical_upcoming">Loading calendar ...</div>
+   </div>
+   <!--div class="calendar" style="float:right;">
+    <p class="topic">Previous Events</p>
+    <div id="grical_previous">Loading Old Events ...</div>
+   </div-->
+  </div>
+  <!-- Door and Presence Status ------------------------ -->
+  <br/>
+   <!-- Sensor Data ------------------------ -->
+  <div class="sensorgraphs">
+    <p class="topic">Sensor Data</p>
+    <div class="sensorelem">
+    <table class="status" style="">
+    <tr><td id="anwesenheit_status" style="height:100px; border:0px none black;">Loading ...</td></tr>
+    <tr><td id="sensor_status" style="border:1px solid black; margin-top:5px;">Loading ...</td></tr>
+    </table>
+    </div>
+    <!--div class="sensorelem">
+     <img id="tempsensor" class="sensorimg" src="http://realraum.at/get_sensor.php?sensor=temp"/>
+    </div-->
+    <div class="sensorelem">
+      <img id="lightsensor" class="sensorimg" src="http://realraum.at/get_sensor.php?sensor=light"/>
+    </div>
+    <div class="sensorelem">
+      <img id="movementsensor" class="sensorimg" src="http://realraum.at/get_sensor.php?sensor=movement"/>
+    </div>
+  </div>
+</body>
+</html>

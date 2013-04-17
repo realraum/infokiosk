@@ -1,0 +1,4 @@
+# cron.d/restart-kiosk - restart midori and unclutter (memory gets filled up...)
+#
+42 4 * * 1 pi /usr/local/bin/start-kiosk.sh
+10 19 * * 5 pi /usr/local/bin/start-kiosk.sh

@@ -1,0 +1,173 @@
+
+body {
+  font-family: "Droid Sans", Helvetica, Arial, Sans;
+  color:black;
+  font-size:22px;
+  padding:0;
+  margin:0;
+  background-color: white;
+}
+
+div {
+  width: 100%;
+  padding: 0;
+}
+
+div#siteheader {
+  text-align: center;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: white;
+  //background-color: #36373B;
+  background-color: rgb(118, 20, 7);
+  font-size:40px;
+  margin-top:10px;
+}
+
+img.headerphoto {
+  width:100%;
+  margin: -60px 0 0 0px;
+}
+
+div.headerphoto {
+  display:block;
+  width: 100%;
+  height: 350px;
+  overflow: hidden;
+  padding: 0.1em 0;
+  text-align: center;
+  margin-top:10px;
+}
+
+div.status {
+  display:block;
+  width: 98%;
+  margin-top:10px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+table.status {
+  width:571px;
+  display:inline;
+  margin-left: 0;
+  margin:right: 0;
+  margin-top:0;
+  margin-bottom:1ex;
+}
+
+p.anwesenheit_status {
+}
+
+td.anwesenheitsstatus {
+  height:100px;
+  text-align:center;
+  margin-left:105px;
+  margin-right:auto;
+  vertical-align:middle;
+  display:table-cell;
+  font-weight:bold;
+  font-size:30px;
+}
+
+p.topic {
+  width: 100%;
+  margin-bottom:1ex;
+  margin-top:0px;
+  margin-left:0px;
+  margin-right:0px;
+  font-weight: bold;
+  font-variant:small-caps;
+  font-size: 110%;
+  color: white;
+  text-align:center;
+  background-color: #36373B;
+}
+
+div.calendars {
+  display:block;
+  width: 100%;
+  height: 15em;
+  margin-top:10px;
+  margin-left:0px;
+  margin-right:0px;
+}
+
+div.calendar {
+  //width: 48%;
+  width: 99%;
+  height: 15em;
+  overflow: hidden;
+  border:1px solid #333;
+  margin-bottom:0ex;
+  margin-top:0ex;
+  margin-left:5px;
+  margin-right:5px;
+}
+
+div.sensorgraphs {
+  display:block;
+  text-align:center;
+  border:1px solid #333;
+  width:99%;
+  //height:35em;
+  padding-bottom:2px;
+  background-color:#fff;
+  margin-top:10px;
+  margin-bottom:10px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+div.sensorelem {
+  display:block;
+  width:571px;
+  margin-top:2px;
+  margin-bottom:0;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+img.sensorimg {
+  margin:0;
+  padding:0;
+  border:0px none black;
+  width:571px;
+}
+
+div.even {
+  background-color: white;
+}
+
+div.odd {
+  background-color: #E0E0E0;
+}
+
+div#dateclock {
+  text-align: center;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: white;
+  background-color: #36373B;
+  font-size:48px;
+}
+
+span.start,span.end,span.showname {
+  font-weight: bold;
+  margin: 0.1em 0.22em;
+}
+
+span.start,span.end {
+  font-size: 0.75em;
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+span.start {
+  float: left;
+}
+
+span.end {
+  float: right;
+}
+
