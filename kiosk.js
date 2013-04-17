@@ -149,9 +149,9 @@ $(document).ready(function()
   loadCalendar();
   loadGooglePlusEvents();
   setInterval("updateAnwesenheitStatus()", 10000);
-  setInterval("loadCalendar()", 100000);
-  setInterval("updateSensors()", 50000);
-  setInterval("loadGooglePlusEvents()", 3600*1000);
+  setInterval("loadCalendar()", 123*1000);
+  setInterval("updateSensors()",125*1000);
+  setInterval("loadGooglePlusEvents()", 1207*1000);
 });
 
 function updateDateClock(now)
