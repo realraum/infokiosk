@@ -44,7 +44,6 @@ function loadGooglePlusEvents()
   var gpak = "AIzaSyD9xBFM-KWwSYBgZ8VzftJ5wYYvurOxEHg";
   var gplusuri = "https://www.googleapis.com/plus/v1/people/113737596421797426873/activities/public?maxResults=4&key="+gpak;
   var gpluscontainer=document.getElementById("gplusevents");
-  gpluscontainer.innerHTML="Plus loading ...";
   $.getJSON(gplusuri, function(data){
     writeGooglePlusEvents(data, gpluscontainer);
   });
@@ -80,7 +79,6 @@ function loadCalendar()
 {
   //old URI: //grical.realraum.at/s/?query=!realraum&limit=9&view=json
   var calcontainer=document.getElementById("grical_upcoming");
-  calcontainer.innerHTML="Calendar loading ...<br/>please wait a second or two";
   $.getJSON('/shmcache/grical_realraum.json', function(data){
     writeCalendar(data, calcontainer);
   });
@@ -204,6 +202,16 @@ function showError(XMLHttpRequest, textStatus, errorThrown)
   alert("Error: " + textStatus);
 }
 
+function IsImageOk(img) {
+    if (!img.complete) {
+        return false;
+    }
+    if (typeof img.naturalWidth != "undefined" && img.naturalWidth == 0) {
+        return false;
+    }
+    return true;
+}
+
 function reloadImg(element)
 {
     //var image = document.getElementById("theText");
@@ -213,7 +221,10 @@ function reloadImg(element)
         new_image.id = element.id;
         new_image.className = element.className;
         new_image.src = element.src;
-        element.parentNode.insertBefore(new_image,element);
-        element.parentNode.removeChild(element);
+	if (IsImageOk(new_image))
+	{
+        	element.parentNode.insertBefore(new_image,element);
+        	element.parentNode.removeChild(element);
+	}
     }
 }
