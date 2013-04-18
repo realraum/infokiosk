@@ -5,7 +5,7 @@ body {
   font-size:22px;
   padding:0;
   margin:0;
-  background-color: white;
+  background-color: #D0D0AF;
   overflow: hidden;
   max-width:900px;
   max-height:1440px;
@@ -43,12 +43,19 @@ div.headerphoto {
   margin-top:10px;
 }
 
-div.status {
+div.contentborder,
+div.calendar,
+div.sensorgraphs,
+div.gpluswall
+{
   display:block;
-  width: 98%;
+  background-color: white;
+  border-top-left-radius:10px;
+  border-top-right-radius:10px;
   margin-top:10px;
-  margin-left:auto;
-  margin-right:auto;
+  margin-left:0px;
+  margin-right:0px;
+  overflow:hidden;
 }
 
 p.topic {
@@ -62,31 +69,28 @@ p.topic {
   font-size:22px;
   color: white;
   text-align:center;
-  background-color: #36373B;
+  background-color: #272727;
 }
 
 div.calendar {
-  display:block;
   width: 100%;
   height: 13em;
-  margin-top:10px;
-  margin-left:0px;
-  margin-right:0px;
-  overflow: hidden;
-  border:1px solid #333;
   font-size:26px;
 }
 
-div.sensorgraphs {
+div.status {
   display:block;
+  width: 98%;
+  margin-top:10px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+div.sensorgraphs {
   text-align:center;
-  border:1px solid #333;
   width:399px;
   //height:35em;
-  padding-bottom:2px;
-  background-color:#fff;
-  margin-top:10px;
-  margin-bottom:10px;
+  padding-bottom:1em;
   margin-left:auto;
   margin-right:auto;
 }
@@ -114,12 +118,12 @@ td.anwesenheitsstatus {
   font-size:30px;
 }
 
-td.sensorstatus{
+td.sensorstatus {
   height:50px;
   text-align:center;
   vertical-align:middle;
   display:table-cell;
-  background-color: rgb(255, 246, 243);
+  background-color: Gainsboro;
 }
 
 div.sensorelem {
@@ -140,20 +144,18 @@ img.sensorimg {
 
 div.gpluswall {
   width: 497px;
-  border:1px solid #333;
-  margin-bottom:0;
-  margin-top:10px;
+  padding-bottom:1em;
 }
 
 div.gpluspost {
   display:block;
-  width: 497px;
+  width: 495px;
   margin-left:0;
   margin-right:0;
-  border-top:1px solid #333;
+  border:1px solid Gainsboro;
   margin-top:0;
   margin-bottom:6px;
-  background-color: rgb(255, 246, 243);
+  background-color: rgb(253, 253, 253);
 }
 img.gplusactor {
   margin-left:2px;
@@ -172,8 +174,9 @@ p.gplustimestamp {
   margin-bottom:4px;
   margin-right:0;
   font-size:9pt;
-  color:white;
-  background-color: #333;
+  color:DimGray;
+  background-color: Gainsboro;
+  border-bottom-left-radius:9px;
 }
 p.gplusimg {
   display:block;
@@ -185,7 +188,7 @@ p.gplusimg {
   max-height:275px;
 }
 img.gplusimg {
-  width:497px;
+  width:495px;
 }
 p.gplustxt {
   display:block;
@@ -206,7 +209,7 @@ div#dateclock {
   font-size: 1.2em;
   font-weight: bold;
   color: white;
-  background-color: #36373B;
+  background-color: #272727;
   font-size:48px;
 }
 
