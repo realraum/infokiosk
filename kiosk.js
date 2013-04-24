@@ -138,18 +138,6 @@ function updateAnwesenheitStatus()
  //req.send(null);
  var jqxhr = $.getJSON(url, writeAnwesenheitStatus);
 }
-var anwesenheit_timer = window.setInterval("updateAnwesenheitStatus()", 10000);
-
-function updateSensors()
-{
-  reloadImg(document.getElementById("tempsensor"));
-  reloadImg(document.getElementById("movementsensor"));
-  reloadImg(document.getElementById("lightsensor"));
-}
-
-var timer;
-var seconds = 0;
-var schedule = Array()
 
 $(document).ready(function()
 {
@@ -158,7 +146,7 @@ $(document).ready(function()
   updateAnwesenheitStatus();
   loadCalendar();
   loadGooglePlusEvents();
-  setInterval("updateAnwesenheitStatus()", 10000);
+  setInterval("updateAnwesenheitStatus()", 10*1000);
   setInterval("loadCalendar()", 123*1000);
   setInterval("updateSensors()",125*1000);
   setInterval("loadGooglePlusEvents()", 1207*1000);
@@ -189,7 +177,7 @@ function highlightEntry(idx, color, value)
   }
 }
 
-
+var seconds = 0;
 function clock(now)
 {
   var now = new Date(new Date().valueOf() + 300);
@@ -200,21 +188,25 @@ function clock(now)
   }
 }
 
-//function updateSchedule()
-//{
-//  $.ajax({type: "GET", url: "/export/schedules.php", data: "days=3&start=-1", dataType: "xml", error: showError, success: parseXml});
-//}
-
 function showError(XMLHttpRequest, textStatus, errorThrown)
 {
   alert("Error: " + textStatus);
 }
 
+function updateSensors()
+{
+  reloadImg(document.getElementById("tempsensor"));
+  reloadImg(document.getElementById("movementsensor"));
+  reloadImg(document.getElementById("lightsensor"));
+}
+
 function IsImageOk(img) {
-    if (!img.complete) {
+    if (!img.complete)
+    {
         return false;
     }
-    if (typeof img.naturalWidth != "undefined" && img.naturalWidth == 0) {
+    if (typeof img.naturalWidth == "undefined" || (typeof img.naturalWidth == "number" && img.naturalWidth == 0))
+    {
         return false;
     }
     return true;
@@ -223,16 +215,17 @@ function IsImageOk(img) {
 function reloadImg(element)
 {
     //var image = document.getElementById("theText");
-    if(element.complete) {
-        var new_image = new Image();
-        //set up the new image
-        new_image.id = element.id;
-        new_image.className = element.className;
-        new_image.src = element.src;
-	if (IsImageOk(new_image))
-	{
-        	element.parentNode.insertBefore(new_image,element);
-        	element.parentNode.removeChild(element);
-	}
+    if(element.complete)
+    {
+      var new_image = new Image();
+      //set up the new image
+      new_image.id = element.id;
+      new_image.className = element.className;
+      new_image.src = element.src;
+      if (IsImageOk(new_image))
+      {
+        element.parentNode.insertBefore(new_image,element);
+        element.parentNode.removeChild(element);
+      }
     }
 }
