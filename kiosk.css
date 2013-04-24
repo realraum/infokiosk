@@ -178,7 +178,7 @@ p.gplustimestamp {
   background-color: Gainsboro;
   border-bottom-left-radius:9px;
 }
-p.gplusimg {
+table.gplusimg {
   display:block;
   margin-left:0;
   margin-top:6px;
@@ -186,9 +186,11 @@ p.gplusimg {
   margin-right:0;
   overflow:hidden;
   max-height:275px;
-}
-img.gplusimg {
   width:495px;
+  border: 0px none black;
+  padding: 0;
+  border-spacing: 0;
+  border-collapse:collapse;
 }
 p.gplustxt {
   display:block;

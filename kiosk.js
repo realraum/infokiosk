@@ -7,18 +7,21 @@ function writeGooglePlusEvents(data, elem)
     var noteobj = item.object;
     var attach = noteobj.attachments;
     var notetxt = noteobj.content;
-    var noteimg = false;
+    var noteimgs = new Array();
     if (attach)
     {
       for (var a=0; a<attach.length; a++)
       {
         if ( attach[a].objectType == "album")
         {
-          noteimg = attach[a].thumbnails[0].image.url;
+          for (var t=0; t<attach[a].thumbnails.length; t++)
+          {
+            noteimgs.push(attach[a].thumbnails[t].image.url);
+          }
         }
         else if ( attach[a].objectType == "photo")
         {
-          noteimg = attach[a].image.url;
+          noteimgs.push(attach[a].image.url);
         }
         else if (attach[a].objectType == "event")
         {
@@ -29,9 +32,14 @@ function writeGooglePlusEvents(data, elem)
     ghtml += '<div class="gpluspost">'
     ghtml += '<img class="gplusactor" src="'+item.actor.image.url+'"/><p class="gplustimestamp">'+item.updated.substring(0,16).replace("T"," ")+'</p>';
     ghtml += '<p class="gplustxt">'+notetxt+'</p>';
-    if (noteimg)
+    if (noteimgs.length>0)
     {
-      ghtml += '<p class="gplusimg"><img class="gplusimg" src="'+noteimg+'"/></p>';
+      ghtml += '<table class="gplusimg" cellspacing="0"><tr>';
+      for (var ni=0; ni<noteimgs.length; ni++)
+      {
+        ghtml += '<td><img class="gplusimg" src="'+noteimgs[ni]+'"/></td>';
+      }
+      ghtml += '</tr></table>';
     }
     ghtml += '</div>';
   }
