@@ -225,7 +225,7 @@ function reloadImg(element)
       {
         img_orig_src[element.id] = element.src;
       }
-      new_image.src = img_orig_src[element.id] + "&dt="+Math.floor(new Date().getTime() / 1000).toString();
+      new_image.src = img_orig_src[element.id] + "?dt="+Math.floor(new Date().getTime() / 1000).toString();
       if (IsImageOk(new_image))
       {
         element.parentNode.insertBefore(new_image,element);
