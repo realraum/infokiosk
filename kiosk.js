@@ -148,7 +148,7 @@ $(document).ready(function()
   loadGooglePlusEvents();
   setInterval("updateAnwesenheitStatus()", 10*1000);
   setInterval("loadCalendar()", 123*1000);
-  setInterval("updateSensors()",125*1000);
+  setInterval("updateSensors()",145*1000);
   setInterval("loadGooglePlusEvents()", 1207*1000);
 });
 
@@ -212,16 +212,20 @@ function IsImageOk(img) {
     return true;
 }
 
+var img_orig_src = {};
 function reloadImg(element)
 {
-    //var image = document.getElementById("theText");
     if(element.complete)
     {
       var new_image = new Image();
       //set up the new image
       new_image.id = element.id;
       new_image.className = element.className;
-      new_image.src = element.src;
+      if (! img_orig_src[element.id])
+      {
+        img_orig_src[element.id] = element.src;
+      }
+      new_image.src = img_orig_src[element.id] + "&dt="+Math.floor(new Date().getTime() / 1000).toString();
       if (IsImageOk(new_image))
       {
         element.parentNode.insertBefore(new_image,element);
