@@ -57,6 +57,22 @@ function loadGooglePlusEvents()
   });
 }
 
+function weekday2str(dow)
+{
+    var weekday=new Array(7);
+    weekday[0]="So";
+    weekday[1]="Mo";
+    weekday[2]="Di";
+    weekday[3]="Mi";
+    weekday[4]="Do";
+    weekday[5]="Fr";
+    weekday[6]="Sa";
+    weekday[7]="So";
+    if (dow >=0 && dow <=7)
+        return weekday[dow];
+    else
+        return "";
+}
 
 function writeCalendar(data, elem)
 {
@@ -71,13 +87,20 @@ function writeCalendar(data, elem)
       }
       else
       {
+        var weekday = weekday2str((new Date(dt)).getDay());
         var stime = data[s].starttime;
+        var month = data[s].start.substring(5,7);
+        if (month[0] == '0')
+          month = month[1];
+        var dayofmonth = data[s].start.substring(8,10);
+          if (dayofmonth[0] == '0')
+          dayofmonth = dayofmonth[1];
         while (stime.substring(stime.length-3,stime.length) == ":00")
         {
           stime=stime.substring(0,stime.length-3);
         }
         if (stime.length <= 2) { stime+="h"; }
-        when = data[s].start.substring(8,10)+"."+data[s].start.substring(5,7) +", "+stime;
+        when = weekday + " " + dayofmonth+"."+month +", "+stime;
       }
       calhtml += '<li class="level1">'+when+' - <span class="r3red">'+data[s].title+'</span></li>'+"\n";
     }
