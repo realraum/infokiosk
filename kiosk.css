@@ -78,6 +78,15 @@ div.calendar {
   font-size:26px;
 }
 
+ul {
+	margin-top:18px;
+	padding-left:28px;
+}
+
+li.level1 {
+	white-space:nowrap;
+}
+
 div.status {
   display:block;
   width: 98%;
