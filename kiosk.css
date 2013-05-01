@@ -207,14 +207,6 @@ p.gplustxt {
   margin: 4px;
 }
 
-div.even {
-  background-color: white;
-}
-
-div.odd {
-  background-color: #E0E0E0;
-}
-
 div#dateclock {
   text-align: center;
   font-size: 1.2em;
@@ -222,24 +214,5 @@ div#dateclock {
   color: white;
   background-color: #272727;
   font-size:48px;
-}
-
-span.start,span.end,span.showname {
-  font-weight: bold;
-  margin: 0.1em 0.22em;
-}
-
-span.start,span.end {
-  font-size: 0.75em;
-  margin-left: 1em;
-  margin-right: 1em;
-}
-
-span.start {
-  float: left;
-}
-
-span.end {
-  float: right;
 }
 
