@@ -171,7 +171,8 @@ $(document).ready(function()
   loadGooglePlusEvents();
   setInterval("updateAnwesenheitStatus()", 10*1000);
   setInterval("loadCalendar()", 123*1000);
-  setInterval("updateSensors()",145*1000);
+  //setInterval("updateSensors()",145*1000);
+  setInterval("updateSensors()",1000);
   setInterval("loadGooglePlusEvents()", 1207*1000);
 });
 
@@ -236,7 +237,7 @@ function IsImageOk(img) {
 }
 
 var img_orig_src = {};
-function reloadImg(element)
+function reloadImgAlt(element)
 {
     if(element.complete)
     {
@@ -255,4 +256,12 @@ function reloadImg(element)
         element.parentNode.removeChild(element);
       }
     }
+}
+function reloadImg(element)
+{
+    if (! img_orig_src[element.id])
+    {
+      img_orig_src[element.id] = element.src;
+    }
+    element.src = img_orig_src[element.id] + "?dt="+Math.floor(new Date().getTime() / 1000).toString();
 }
