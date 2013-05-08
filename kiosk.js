@@ -9,7 +9,8 @@ function min(a,b)
 function writeGooglePlusEvents(data, elem)
 {
   var ghtml = "";
-  var gplusimgwidth = parseInt($('<table class="gplusimg" />').css("width"));
+  //var gplusimgwidth = parseInt($('<table class="gplusimg" />').css("width"));
+  var gplusimgwidth = 495;
   var minimgwidth=78;
   for (var i=0; i< data.items.length; i++)
   {

@@ -194,7 +194,7 @@ table.gplusimg {
   margin-right:0;
   overflow:hidden;
   max-height:275px;
-  width:495px;
+  max-width:495px;
   border: 0px none black;
   padding: 0;
   border-spacing: 0;
