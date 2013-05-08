@@ -1,6 +1,16 @@
+function min(a,b)
+{
+	if (a > b)
+		return b;
+	else
+		return a;
+}
+
 function writeGooglePlusEvents(data, elem)
 {
   var ghtml = "";
+  var gplusimgwidth = parseInt($('<table class="gplusimg" />').css("width"));
+  var minimgwidth=78;
   for (var i=0; i< data.items.length; i++)
   {
     var item = data.items[i];
@@ -33,11 +43,33 @@ function writeGooglePlusEvents(data, elem)
     ghtml += '<img class="gplusactor" src="'+item.actor.image.url+'"/><p class="gplustimestamp">'+item.updated.substring(0,16).replace("T"," ")+'</p>';
     ghtml += '<p class="gplustxt">'+notetxt+'</p>';
     if (noteimgs.length>0)
-    {
+    { 
+      var bigimglimit;
       ghtml += '<table class="gplusimg" cellspacing="0"><tr>';
-      for (var ni=0; ni<noteimgs.length; ni++)
+      if (noteimgs.length > 3)
       {
-        ghtml += '<td><img class="gplusimg" src="'+noteimgs[ni]+'"/></td>';
+              var gplusimgmaxwidth = gplusimgwidth - (minimgwidth * ((noteimgs.length -1) / 3));
+	      bigimglimit = "max-height:"+(minimgwidth*3)+"px; max-width:"+gplusimgmaxwidth+"px;"
+	      ghtml += '<td><img class="gplusimg" style="'+bigimglimit+'" src="'+noteimgs[0]+'"/></td>';
+	      for (var ni=1; ni<noteimgs.length; ni+=3)
+	      {
+		  ghtml += '<td>';
+		  var niimax = min(noteimgs.length, ni+3);
+		  for (var nii=ni; nii<niimax; nii++)
+		  {
+			ghtml += '<img class="gplusimg" style="max-width:'+minimgwidth+'px; max-height:'+minimgwidth+'px;" src="'+noteimgs[nii]+'"/><br/>';
+		  }
+	          ghtml += '</td>';
+             }
+      }
+      else
+      {
+             var gplusimgmaxwidth = gplusimgwidth / noteimgs.length;
+	     bigimglimit = "max-width:"+gplusimgmaxwidth+"px;"
+             for (var ni=0; ni<noteimgs.length; ni++)
+	     {
+		ghtml += '<td><img class="gplusimg" style="'+bigimglimit+'" src="'+noteimgs[ni]+'"/></td>';
+	     }
       }
       ghtml += '</tr></table>';
     }
