@@ -168,20 +168,47 @@ function writeAnwesenheitStatus(data)
 
   if (data.sensors)
   {
-    for (var s=0; s<data.sensors.length;s++)
+    if (data.sensors.temperature)
     {
-      $.each( data.sensors[s], function(stype, std){
-        $.each( std, function(swhere, svalue){
-           sensorstd+='<td class="sensorstatus"><b>'+stype+'</b><br/>'+swhere+': '+svalue+'</td>';
-        });
+      $.each( data.sensors.temperature, function(s, sensorobj) {
+        sensorstd+='<td style="background-color:white; height:42px; text-align:center; vertical-align:middle; display:table-cell;"><b>Temperatur</b><br/>'+sensorobj.location+': '+sensorobj.value.toFixed(2)+sensorobj.unit+'</td>';
       });
     }
-  }
-  if (sensorstd != "")
-  {
-    sensorshtml='<table border="0" cellpadding="0" cellspacing="0" width="100%"><tr>'+sensorstd+'</tr></table>';
-    document.getElementById('sensor_status').innerHTML=sensorshtml;
-  }
+    if (data.sensors.ext_illumination)
+    {
+      $.each( data.sensors.ext_illumination, function(s, sensorobj) {
+        sensorstd+='<td style="background-color:white; height:42px; text-align:center; vertical-align:middle; display:table-cell;"><b>Licht</b><br/>'+sensorobj.location+': '+sensorobj.value+'</td>';
+      });
+    }
+    if (data.sensors.door_locked)
+    {
+      $.each( data.sensors.door_locked, function(s, sensorobj)  {
+        var lockstatus="Unlocked";
+        if (sensorobj.value) { lockstatus = "Locked"; }
+        sensorstd+='<td style="background-color:white; height:42px; text-align:center; vertical-align:middle; display:table-cell;"><b>Türschloß</b><br/>'+sensorobj.location+': '+lockstatus+'</td>';
+      });
+    }
+    if (data.sensors.ext_door_ajar)
+    {
+      $.each( data.sensors.ext_door_ajar, function(s, sensorobj)  {
+        var lockstatus="Shut";
+        if (sensorobj.value) { lockstatus = "Ajar"; }
+        sensorstd+='<td style="background-color:white; height:42px; text-align:center; vertical-align:middle; display:table-cell;"><b>Türkontakt</b><br/>'+sensorobj.location+': '+lockstatus+'</td>';
+      });
+    }
+    if (data.sensors.ext_dust)
+    {
+      $.each( data.sensors.ext_dust, function(s, sensorobj) {
+        sensorstd+='<td style="background-color:white; height:42px; text-align:center; vertical-align:middle; display:table-cell;"><b>Staub</b><br/>'+sensorobj.location+': '+sensorobj.value+sensorobj.unit+'</td>';
+      });
+
+    }    
+    if (sensorstd != "")
+    {
+      sensorshtml='<table border="0" cellpadding="0" cellspacing="0" width="100%"><tr>'+sensorstd+'</tr></table>';
+      document.getElementById('sensor_status').innerHTML=sensorshtml;
+    }
+  }  
 }
 
 function updateAnwesenheitStatus()
