@@ -166,41 +166,51 @@ function writeAnwesenheitStatus(data)
   html='<table border="0" cellpadding="0" cellspacing="0" width="100%" height="100"><tr><td style="width:100px;"><img style="float:left;" src="'+iconuri+'" height="100" width="100"/></td><td style="width:4px;"></td><td class="anwesenheitsstatus" style="background-color:'+statuscolor+'; ">'+data.status+'</td></tr></table>';
   document.getElementById('anwesenheit_status').innerHTML=html;
 
-  if (data.sensors)
+if (data.sensors)
   {
     if (data.sensors.temperature)
     {
+      sensorstd+='<td style="background-color:white; height:42px; text-align:center; vertical-align:middle; display:table-cell;"><b>Temperatur</b>';
       $.each( data.sensors.temperature, function(s, sensorobj) {
-        sensorstd+='<td style="background-color:white; height:42px; text-align:center; vertical-align:middle; display:table-cell;"><b>Temperatur</b><br/>'+sensorobj.location+': '+sensorobj.value.toFixed(2)+sensorobj.unit+'</td>';
+        sensorstd+='<br/>'+sensorobj.location+': '+sensorobj.value.toFixed(2)+sensorobj.unit;
       });
+      sensorstd+='</td>';
     }
     if (data.sensors.ext_illumination)
     {
+      sensorstd+='<td style="background-color:white; height:42px; text-align:center; vertical-align:middle; display:table-cell;"><b>Licht</b>';
       $.each( data.sensors.ext_illumination, function(s, sensorobj) {
-        sensorstd+='<td style="background-color:white; height:42px; text-align:center; vertical-align:middle; display:table-cell;"><b>Licht</b><br/>'+sensorobj.location+': '+sensorobj.value+'</td>';
+        sensorstd+='<br/>'+sensorobj.location+': '+sensorobj.value;
       });
+      sensorstd+='</td>';
     }
     if (data.sensors.door_locked)
     {
+      sensorstd+='<td style="background-color:white; height:42px; text-align:center; vertical-align:middle; display:table-cell;"><b>Eingangstür</b>';
       $.each( data.sensors.door_locked, function(s, sensorobj)  {
-        var lockstatus="Unlocked";
-        if (sensorobj.value) { lockstatus = "Locked"; }
-        sensorstd+='<td style="background-color:white; height:42px; text-align:center; vertical-align:middle; display:table-cell;"><b>Türschloß</b><br/>'+sensorobj.location+': '+lockstatus+'</td>';
+        var lockstatus="Auf";
+        if (sensorobj.value) { lockstatus = "Zu"; }
+        sensorstd+='<br/>'+sensorobj.location+': '+lockstatus;
       });
+      sensorstd+='</td>';
     }
     if (data.sensors.ext_door_ajar)
     {
+      sensorstd+='<td style="background-color:white; height:42px; text-align:center; vertical-align:middle; display:table-cell;"><b>Türkontakt</b>';
       $.each( data.sensors.ext_door_ajar, function(s, sensorobj)  {
-        var lockstatus="Shut";
-        if (sensorobj.value) { lockstatus = "Ajar"; }
-        sensorstd+='<td style="background-color:white; height:42px; text-align:center; vertical-align:middle; display:table-cell;"><b>Türkontakt</b><br/>'+sensorobj.location+': '+lockstatus+'</td>';
+        var lockstatus="Auf";
+        if (sensorobj.value) { lockstatus = "Zu"; }
+        sensorstd+='<br/>'+sensorobj.location+': '+lockstatus;
       });
+      sensorstd+='</td>';
     }
     if (data.sensors.ext_dust)
     {
+      sensorstd+='<td style="background-color:white; height:42px; text-align:center; vertical-align:middle; display:table-cell;"><b>Staub</b>';
       $.each( data.sensors.ext_dust, function(s, sensorobj) {
-        sensorstd+='<td style="background-color:white; height:42px; text-align:center; vertical-align:middle; display:table-cell;"><b>Staub</b><br/>'+sensorobj.location+': '+sensorobj.value+sensorobj.unit+'</td>';
+        sensorstd+='<br/>'+sensorobj.location+': '+sensorobj.value+sensorobj.unit+'</td>';
       });
+      sensorstd+='</td>';
 
     }    
     if (sensorstd != "")
@@ -208,7 +218,7 @@ function writeAnwesenheitStatus(data)
       sensorshtml='<table border="0" cellpadding="0" cellspacing="0" width="100%"><tr>'+sensorstd+'</tr></table>';
       document.getElementById('sensor_status').innerHTML=sensorshtml;
     }
-  }  
+  }
 }
 
 function updateAnwesenheitStatus()
