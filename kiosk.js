@@ -107,9 +107,8 @@ function weekday2str(dow)
         return "";
 }
 
-function writeCalendar(data, elem)
+function calendarItemIterator(data)
 {
-    var calhtml = "";
     for (var s=0; s<data.length; s++)
     {
       var when = "";
@@ -135,18 +134,37 @@ function writeCalendar(data, elem)
         if (stime.length <= 2) { stime+="h"; }
         when = weekday + " " + dayofmonth+"."+month +", "+stime;
       }
+      var itm = data[s];
+ 	  itm.when = when;
+	  yield itm;
+    }
+}
+
+function loadCalendarKiosk()
+{
+  var calcontainer=document.getElementById("grical_upcoming");
+  $.getJSON('/shmcache/grical_realraum.json', function(data){
+    var calhtml = "";
+    for (var itm in calendarItemIterator(data)) {
       calhtml += '<li class="level1">'+when+' - <span class="r3red">'+data[s].title+'</span></li>'+"\n";
     }
-    elem.innerHTML='<ul>'+calhtml+'</ul>';
+    calcontainer.innerHTML='<ul>'+calhtml+'</ul>';
+  });
 }
-function loadCalendar()
+
+function loadCalendarMainPage()
 {
   //old URI: //grical.realraum.at/s/?query=!realraum&limit=9&view=json
   var calcontainer=document.getElementById("grical_upcoming");
   $.getJSON('/shmcache/grical_realraum.json', function(data){
-    writeCalendar(data, calcontainer);
+    var calhtml = "";
+    for (var itm in calendarItemIterator(data)) {
+      calhtml += '<li class="level1"><div class="li">'+when+' - <a href="'+data[s].url+'" class="urlextern" title="'+data[s].title+'"  rel="nofollow">'+data[s].title+'</a></div></li>'+"\n";
+    }
+    calcontainer.innerHTML='<ul>'+calhtml+'</ul>';
   });
 }
+
 
 function writeAnwesenheitStatus(data)
 {
@@ -165,8 +183,8 @@ function writeAnwesenheitStatus(data)
   }
   html='<table border="0" cellpadding="0" cellspacing="0" width="100%" height="100"><tr><td style="width:100px;"><img style="float:left;" src="'+iconuri+'" height="100" width="100"/></td><td style="width:4px;"></td><td class="anwesenheitsstatus" style="background-color:'+statuscolor+'; ">'+data.status+'</td></tr></table>';
   document.getElementById('anwesenheit_status').innerHTML=html;
-
-if (data.sensors)
+  
+  if (data.sensors)
   {
     if (data.sensors.temperature)
     {
@@ -231,19 +249,6 @@ function updateAnwesenheitStatus()
  //req.send(null);
  var jqxhr = $.getJSON(url, writeAnwesenheitStatus);
 }
-
-$(document).ready(function()
-{
-  updateDateClock(new Date());
-  setInterval("clock()", 500);
-  updateAnwesenheitStatus();
-  loadCalendar();
-  loadGooglePlusEvents();
-  setInterval("updateAnwesenheitStatus()", 10*1000);
-  setInterval("loadCalendar()", 123*1000);
-  setInterval("updateSensors()",145*1000);
-  setInterval("loadGooglePlusEvents()", 1207*1000);
-});
 
 function updateDateClock(now)
 {
@@ -334,3 +339,16 @@ function reloadImg(element)
     }
     element.src = img_orig_src[element.id] + "?dt="+Math.floor(new Date().getTime() / 1000).toString();
 }
+
+$(document).ready(function()
+{
+  updateDateClock(new Date());
+  setInterval("clock()", 500);
+  updateAnwesenheitStatus();
+  loadCalendarKiosk();
+  loadGooglePlusEvents();
+  setInterval("updateAnwesenheitStatus()", 10*1000);
+  setInterval("loadCalendarKiosk()", 123*1000);
+  setInterval("updateSensors()",145*1000);
+  setInterval("loadGooglePlusEvents()", 1207*1000);
+});
