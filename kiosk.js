@@ -30,7 +30,7 @@ function writeGooglePlusEvents(data, elem)
             noteimgs.push(attach[a].thumbnails[t].image.url);
           }
         }
-        else if ( attach[a].objectType == "photo")
+        else if ( attach[a].objectType == "photo" || attach[a].objectType == "video")
         {
           noteimgs.push(attach[a].image.url);
         }
