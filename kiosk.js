@@ -107,7 +107,7 @@ function weekday2str(dow)
         return "";
 }
 
-function calendarItemIterator(data)
+function calendarItemEnhancer(data)
 {
     for (var s=0; s<data.length; s++)
     {
@@ -134,20 +134,19 @@ function calendarItemIterator(data)
         if (stime.length <= 2) { stime+="h"; }
         when = weekday + " " + dayofmonth+"."+month +", "+stime;
       }
-      var itm = data[s];
- 	  itm.when = when;
-	  yield itm;
+      data[s].when = when
     }
+    return data
 }
 
 function loadCalendarKiosk()
 {
-  var calcontainer=document.getElementById("grical_upcoming");
+  var calcontainer=document.getElementById("grical_upcoming_kiosk");
   $.getJSON('/shmcache/grical_realraum.json', function(data){
     var calhtml = "";
-    for (var itm in calendarItemIterator(data)) {
-      calhtml += '<li class="level1">'+when+' - <span class="r3red">'+data[s].title+'</span></li>'+"\n";
-    }
+    $.each(calendarItemEnhancer(data), function(index, itm) {
+      calhtml += '<li class="level1">'+itm.when+' - <span class="r3red">'+itm.title+'</span></li>'+"\n";        
+    });
     calcontainer.innerHTML='<ul>'+calhtml+'</ul>';
   });
 }
@@ -158,9 +157,9 @@ function loadCalendarMainPage()
   var calcontainer=document.getElementById("grical_upcoming");
   $.getJSON('/shmcache/grical_realraum.json', function(data){
     var calhtml = "";
-    for (var itm in calendarItemIterator(data)) {
-      calhtml += '<li class="level1"><div class="li">'+when+' - <a href="'+data[s].url+'" class="urlextern" title="'+data[s].title+'"  rel="nofollow">'+data[s].title+'</a></div></li>'+"\n";
-    }
+    $.each(calendarItemEnhancer(data), function(index, itm) {
+      calhtml += '<li class="level1"><div class="li">'+itm.when+' - <a href="'+itm.url+'" class="urlextern" title="'+itm.title+'"  rel="nofollow">'+itm.title+'</a></div></li>'+"\n";
+    });
     calcontainer.innerHTML='<ul>'+calhtml+'</ul>';
   });
 }
@@ -181,8 +180,16 @@ function writeAnwesenheitStatus(data)
    iconuri=data.icon.closed;
    statuscolor="red";
   }
-  html='<table border="0" cellpadding="0" cellspacing="0" width="100%" height="100"><tr><td style="width:100px;"><img style="float:left;" src="'+iconuri+'" height="100" width="100"/></td><td style="width:4px;"></td><td class="anwesenheitsstatus" style="background-color:'+statuscolor+'; ">'+data.status+'</td></tr></table>';
-  document.getElementById('anwesenheit_status').innerHTML=html;
+  var anwesenheit_status_kiosk = document.getElementById('anwesenheit_status_kiosk');
+  var anwesenheit_status_frontpage = document.getElementById('anwesenheit_status');
+  if (anwesenheit_status_kiosk)
+  {
+    anwesenheit_status_kiosk.innerHTML='<table border="0" cellpadding="0" cellspacing="0" width="100%" height="100"><tr><td style="width:100px;"><img style="float:left;" src="'+iconuri+'" height="100" width="100"/></td><td style="width:4px;"></td><td class="anwesenheitsstatus" style="background-color:'+statuscolor+'; ">'+data.status+'</td></tr></table>';
+  }
+  if (anwesenheit_status_frontpage)
+  {
+    anwesenheit_status_frontpage.innerHTML='<table border="0" cellpadding="0" cellspacing="0" width="100%" height="42"><tr><td style="width:42px;"><img style="float:left;" src="'+iconuri+'" height="42" width="42"/></td><td style="width:4px;"></td><td style="background-color:'+statuscolor+'; height:42px; text-align:center; margin-left:48px; margin-right:auto; font-size:larger; font-weight:bold; vertical-align:middle; display:table-cell;">'+data.status+'</td></tr></table>';
+  }
   
   if (data.sensors)
   {
@@ -342,13 +349,30 @@ function reloadImg(element)
 
 $(document).ready(function()
 {
-  updateDateClock(new Date());
-  setInterval("clock()", 500);
   updateAnwesenheitStatus();
-  loadCalendarKiosk();
-  loadGooglePlusEvents();
-  setInterval("updateAnwesenheitStatus()", 10*1000);
-  setInterval("loadCalendarKiosk()", 123*1000);
-  setInterval("updateSensors()",145*1000);
-  setInterval("loadGooglePlusEvents()", 1207*1000);
+  setInterval("updateAnwesenheitStatus()", 10*1000);    
+  if (document.getElementById("dateclock"))
+  {
+    updateDateClock(new Date());
+    setInterval("clock()", 500);
+  }
+  if (document.getElementById("grical_upcoming_kiosk"))
+  {
+    loadCalendarKiosk();
+    setInterval("loadCalendarKiosk()", 123*1000);
+  }
+  if (document.getElementById("grical_upcoming"))
+  {
+    loadCalendarMainPage();
+    setInterval("loadCalendarMainPage()", 123*1000);
+  }
+  if (document.getElementById("sensorgraphs"))
+  {
+    setInterval("updateSensors()",145*1000);
+  }
+  if (document.getElementById("gplusevents"))
+  {
+    loadGooglePlusEvents();
+    setInterval("loadGooglePlusEvents()", 1207*1000);
+  }
 });
