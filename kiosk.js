@@ -195,7 +195,7 @@ function writeAnwesenheitStatus(data)
   {
     if (data.sensors.temperature)
     {
-      sensorstd+='<td style="background-color:white; height:42px; text-align:center; vertical-align:middle; display:table-cell;"><b>Temperatur</b>';
+      sensorstd+='<td class="sensorstatus"><b>Temperatur</b>';
       $.each( data.sensors.temperature, function(s, sensorobj) {
         sensorstd+='<br/>'+sensorobj.location+': '+sensorobj.value.toFixed(2)+sensorobj.unit;
       });
@@ -203,7 +203,7 @@ function writeAnwesenheitStatus(data)
     }
     if (data.sensors.ext_illumination)
     {
-      sensorstd+='<td style="background-color:white; height:42px; text-align:center; vertical-align:middle; display:table-cell;"><b>Licht</b>';
+      sensorstd+='<td class="sensorstatus"><b>Licht</b>';
       $.each( data.sensors.ext_illumination, function(s, sensorobj) {
         sensorstd+='<br/>'+sensorobj.location+': '+sensorobj.value;
       });
@@ -211,7 +211,7 @@ function writeAnwesenheitStatus(data)
     }
     if (data.sensors.door_locked)
     {
-      sensorstd+='<td style="background-color:white; height:42px; text-align:center; vertical-align:middle; display:table-cell;"><b>Eingangstür</b>';
+      sensorstd+='<td class="sensorstatus"><b>Eingangstür</b>';
       $.each( data.sensors.door_locked, function(s, sensorobj)  {
         var lockstatus="Auf";
         if (sensorobj.value) { lockstatus = "Zu"; }
@@ -221,7 +221,7 @@ function writeAnwesenheitStatus(data)
     }
     if (data.sensors.ext_door_ajar)
     {
-      sensorstd+='<td style="background-color:white; height:42px; text-align:center; vertical-align:middle; display:table-cell;"><b>Türkontakt</b>';
+      sensorstd+='<td class="sensorstatus"><b>Türkontakt</b>';
       $.each( data.sensors.ext_door_ajar, function(s, sensorobj)  {
         var lockstatus="Auf";
         if (sensorobj.value) { lockstatus = "Zu"; }
@@ -231,7 +231,7 @@ function writeAnwesenheitStatus(data)
     }
     if (data.sensors.ext_dust)
     {
-      sensorstd+='<td style="background-color:white; height:42px; text-align:center; vertical-align:middle; display:table-cell;"><b>Staub</b>';
+      sensorstd+='<td class="sensorstatus"><b>Staub</b>';
       $.each( data.sensors.ext_dust, function(s, sensorobj) {
         sensorstd+='<br/>'+sensorobj.location+': '+sensorobj.value+sensorobj.unit+'</td>';
       });

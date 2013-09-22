@@ -17,7 +17,7 @@ div#siteheader {
   text-align: center;
   color: white;
   background-color: rgb(118, 20, 7);
-  font-size:40px;
+  font-size:180%;
   font-weight: bold;
   margin-top:10px;
 }
@@ -79,7 +79,7 @@ p.topic {
   margin-right:0px;
   font-weight: bold;
   font-variant:small-caps;
-  font-size:22px;
+  font-size:100%;
   color: white;
   text-align:center;
   background-color: #272727;
@@ -88,7 +88,7 @@ p.topic {
 div.calendar {
   width: 100%;
   height: 13em;
-  font-size:26px;
+  font-size:112%;
 }
 
 ul {
@@ -136,15 +136,16 @@ td.anwesenheitsstatus {
   vertical-align:middle;
   display:table-cell;
   font-weight:bold;
-  font-size:30px;
+  font-size:136%;
 }
 
 td.sensorstatus {
-  height:50px;
+  height:42px;
   text-align:center;
   vertical-align:middle;
   display:table-cell;
-  background-color: Gainsboro;
+  background-color: white;
+  font-size:66%;
 }
 
 div.sensorelem {
@@ -194,7 +195,7 @@ p.gplustimestamp {
   margin-left:4px;
   margin-bottom:4px;
   margin-right:0;
-  font-size:9pt;
+  font-size:41%;
   color:DimGray;
   background-color: Gainsboro;
   border-bottom-left-radius:9px;
@@ -215,16 +216,18 @@ table.gplusimg {
 }
 p.gplustxt {
   display:block;
-  font-size:11pt;
+  font-size:66%;
   margin: 4px;
 }
 
 div#dateclock {
   text-align: center;
-  font-size: 1.2em;
   font-weight: bold;
   color: white;
   background-color: #272727;
-  font-size:48px;
+  font-size:217%;
 }
 
+table {
+	font-size: 100%;
+}
