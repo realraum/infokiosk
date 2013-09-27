@@ -195,7 +195,7 @@ p.gplustimestamp {
   margin-left:4px;
   margin-bottom:4px;
   margin-right:0;
-  font-size:41%;
+  font-size:50%;
   color:DimGray;
   background-color: Gainsboro;
   border-bottom-left-radius:9px;
@@ -216,7 +216,7 @@ table.gplusimg {
 }
 p.gplustxt {
   display:block;
-  font-size:66%;
+  font-size:80%;
   margin: 4px;
 }
 
