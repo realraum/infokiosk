@@ -59,6 +59,7 @@ div.headerphoto2 {
 div.contentborder,
 div.calendar,
 div.sensorgraphs,
+div.sensorgauges,
 div.gpluswall
 {
   display:block;
@@ -111,6 +112,14 @@ div.status {
 div.sensorgraphs {
   text-align:center;
   width:399px;
+  padding-bottom:1em;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+div.sensorgauges {
+  text-align:center;
+  width:268px;
   padding-bottom:1em;
   margin-left:auto;
   margin-right:auto;

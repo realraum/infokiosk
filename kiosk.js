@@ -165,6 +165,18 @@ function loadCalendarMainPage()
 }
 
 
+function drawGauge(targetelem, label, temp, options) {
+    var data = google.visualization.arrayToDataTable([["Label", "Value"],[label,temp]]);
+    // Create and draw the visualization.
+    if (targetelem)
+    {
+        options["width"] = targetelem.getAttribute("width");
+        options["height"] = targetelem.getAttribute("height");
+        var chart = new google.visualization.Gauge(targetelem);
+        chart.draw(data, options);
+    }
+}
+
 function writeAnwesenheitStatus(data)
 {
   var html="";
@@ -198,6 +210,7 @@ function writeAnwesenheitStatus(data)
       sensorstd+='<td class="sensorstatus"><b>Temperatur</b>';
       $.each( data.sensors.temperature, function(s, sensorobj) {
         sensorstd+='<br/>'+sensorobj.location+': '+sensorobj.value.toFixed(2)+sensorobj.unit;
+		drawGauge(document.getElementById('tempgauge'), "Temp "+sensorobj.location, sensorobj.value, {redFrom: 33, redTo: 40, yellowFrom:29, yellowTo: 33,  minorTicks: 4, min:0, max:40});
       });
       sensorstd+='</td>';
     }
@@ -206,6 +219,7 @@ function writeAnwesenheitStatus(data)
       sensorstd+='<td class="sensorstatus"><b>Licht</b>';
       $.each( data.sensors.ext_illumination, function(s, sensorobj) {
         sensorstd+='<br/>'+sensorobj.location+': '+sensorobj.value;
+        drawGauge(document.getElementById('lightgauge'), "Licht "+sensorobj.location, sensorobj.value, {redFrom: 950, redTo: 1024,yellowFrom:0, yellowTo: 200,minorTicks: 4, min:0, max:1024});
       });
       sensorstd+='</td>';
     }
