@@ -44,7 +44,7 @@ function writeGooglePlusEvents(data, elem)
     ghtml += '<img class="gplusactor" src="'+item.actor.image.url+'"/><p class="gplustimestamp">'+item.updated.substring(0,16).replace("T"," ")+'</p>';
     ghtml += '<p class="gplustxt">'+notetxt+'</p>';
     if (noteimgs.length>0)
-    { 
+    {
       var bigimglimit;
       ghtml += '<table class="gplusimg" cellspacing="0"><tr>';
       if (noteimgs.length > 3)
@@ -145,7 +145,7 @@ function loadCalendarKiosk()
   $.getJSON('/shmcache/grical_realraum.json', function(data){
     var calhtml = "";
     $.each(calendarItemEnhancer(data), function(index, itm) {
-      calhtml += '<li class="level1">'+itm.when+' - <span class="r3red">'+itm.title+'</span></li>'+"\n";        
+      calhtml += '<li class="level1">'+itm.when+' - <span class="r3red">'+itm.title+'</span></li>'+"\n";
     });
     calcontainer.innerHTML='<ul>'+calhtml+'</ul>';
   });
@@ -177,6 +177,28 @@ function drawGauge(targetelem, label, temp, options) {
     }
 }
 
+function drawLineGraph(targetelem, dataarray, options) {
+  if (dataarray) {
+      var data = google.visualization.arrayToDataTable(dataarray);
+      // Create and draw the visualization.
+      if (targetelem)
+      {
+          options["width"]= targetelem.getAttribute("width");
+          options["height"]=targetelem.getAttribute("height");
+          new google.visualization.LineChart(targetelem).draw(data, options);
+        }
+    }
+}
+
+function loadAndDrawSensorData() {
+  $.getJSON("https://realraum.at/shmcache/r3sensors.json", function(data){
+    drawLineGraph(document.getElementById('tempgooglegraph'), data["TempSensorUpdate"],
+      {curveType: "function", title: 'Temperature Sensors', vAxis: {maxValue: 29, minValue:5}, colors: ['#FF0000','#CC0033','#660000','#CC3333'], chartArea:{left:32,top:20,width:"88%",height:"83%"}, legend: {position: "none"}}  );
+    drawLineGraph(document.getElementById('lightgooglegraph'), data["IlluminationSensorUpdate"],
+        {curveType: "none", title: 'Illumination Sensors', vAxis: {maxValue: 1024, minValue:5}, chartArea:{left:32,top:20,width:"88%",height:"83%"}, legend: {position: "none"}}  );
+    });
+}
+
 function writeAnwesenheitStatus(data)
 {
   var html="";
@@ -202,7 +224,7 @@ function writeAnwesenheitStatus(data)
   {
     anwesenheit_status_frontpage.innerHTML='<table border="0" cellpadding="0" cellspacing="0" width="100%" height="42"><tr><td style="width:42px;"><img style="float:left;" src="'+iconuri+'" height="42" width="42"/></td><td style="width:4px;"></td><td style="background-color:'+statuscolor+'; height:42px; text-align:center; margin-left:48px; margin-right:auto; font-size:larger; font-weight:bold; vertical-align:middle; display:table-cell;">'+data.status+'</td></tr></table>';
   }
-  
+
   if (data.sensors)
   {
     if (data.sensors.temperature)
@@ -251,7 +273,7 @@ function writeAnwesenheitStatus(data)
       });
       sensorstd+='</td>';
 
-    }    
+    }
     if (sensorstd != "")
     {
       sensorshtml='<table border="0" cellpadding="0" cellspacing="0" width="100%"><tr>'+sensorstd+'</tr></table>';
@@ -289,7 +311,7 @@ function highlightEntry(idx, color, value)
   if(value == 0) {
     if(idx%2 == 0)
       $('#upnext' + idx).css('background-color', 'white');
-    else 
+    else
       $('#upnext' + idx).css('background-color', '#E0E0E0');
   } else {
     $('#upnext' + idx).css('background-color', color);
@@ -364,7 +386,7 @@ function reloadImg(element)
 $(document).ready(function()
 {
   updateAnwesenheitStatus();
-  setInterval("updateAnwesenheitStatus()", 10*1000);    
+  setInterval("updateAnwesenheitStatus()", 10*1000);
   if (document.getElementById("dateclock"))
   {
     updateDateClock(new Date());
@@ -383,6 +405,11 @@ $(document).ready(function()
   if (document.getElementById("sensorgraphs"))
   {
     setInterval("updateSensors()",145*1000);
+  }
+  if (document.getElementById("tempgooglegraph") || document.getElementById("lightgooglegraph"))
+  {
+    loadAndDrawSensorData();
+    setInterval("loadAndDrawSensorData()",145*1000);
   }
   if (document.getElementById("gplusevents"))
   {
