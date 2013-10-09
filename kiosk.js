@@ -164,7 +164,7 @@ function loadCalendarMainPage()
   });
 }
 
-
+var gauges = {}
 function drawGauge(targetelem, label, temp, options) {
     var data = google.visualization.arrayToDataTable([["Label", "Value"],[label,temp]]);
     // Create and draw the visualization.
@@ -172,11 +172,14 @@ function drawGauge(targetelem, label, temp, options) {
     {
         options["width"] = targetelem.getAttribute("width");
         options["height"] = targetelem.getAttribute("height");
-        var chart = new google.visualization.Gauge(targetelem);
-        chart.draw(data, options);
+	if (!gauges.hasOwnProperty(targetelem.id)) {
+        	gauges[targetelem.id] = new google.visualization.Gauge(targetelem);
+	}
+        gauges[targetelem.id].draw(data, options);
     }
 }
 
+var linecharts = {}
 function drawLineGraph(targetelem, dataarray, options) {
   if (dataarray) {
       var data = google.visualization.arrayToDataTable(dataarray);
@@ -185,7 +188,10 @@ function drawLineGraph(targetelem, dataarray, options) {
       {
           options["width"]= targetelem.getAttribute("width");
           options["height"]=targetelem.getAttribute("height");
-          new google.visualization.LineChart(targetelem).draw(data, options);
+	  if (!linecharts.hasOwnProperty(targetelem.id)) {
+              linecharts[targetelem.id] = new google.visualization.LineChart(targetelem);
+  	  }
+          linecharts[targetelem.id].draw(data, options);
         }
     }
 }
