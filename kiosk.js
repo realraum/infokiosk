@@ -193,9 +193,11 @@ function drawLineGraph(targetelem, dataarray, options) {
 function loadAndDrawSensorData() {
   $.getJSON("https://realraum.at/shmcache/r3sensors.json", function(data){
     drawLineGraph(document.getElementById('tempgooglegraph'), data["TempSensorUpdate"],
-      {curveType: "function", title: 'Temperature Sensors', vAxis: {maxValue: 29, minValue:5}, colors: ['#FF0000','#CC0033','#660000','#CC3333'], chartArea:{left:32,top:20,width:"88%",height:"83%"}, legend: {position: "none"}}  );
+      {curveType: "function", title: 'Temperature Sensors', colors: ['#FF0000','#CC0033','#660000','#CC3333'], chartArea:{left:32,top:20,width:"88%",height:"83%"}, legend: {position: "none"}}  );
     drawLineGraph(document.getElementById('lightgooglegraph'), data["IlluminationSensorUpdate"],
         {curveType: "none", title: 'Illumination Sensors', vAxis: {maxValue: 1024, minValue:5}, chartArea:{left:32,top:20,width:"88%",height:"83%"}, legend: {position: "none"}}  );
+    drawLineGraph(document.getElementById('movementgooglegraph'), data["MovementSensorUpdate"],
+        {curveType: "none", title: 'Movement Sensors', vAxis: {maxValue: 10, minValue:0}, chartArea:{left:32,top:20,width:"88%",height:"83%"}, legend: {position: "none"}}  );
     });
 }
 
