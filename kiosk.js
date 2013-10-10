@@ -423,11 +423,11 @@ $(document).ready(function()
     loadCalendarMainPage();
     setInterval("loadCalendarMainPage()", 123*1000);
   }
-  if (document.getElementById("sensorgraphs"))
-  {
-    setInterval("updateSensors()",145*1000);
-  }
-  if (document.getElementById("tempgooglegraph") || document.getElementById("lightgooglegraph"))
+//  if (document.getElementById("sensorgraphs"))
+//  {
+//    setInterval("updateSensors()",145*1000);
+//  }
+  if (document.getElementById("tempgooglegraph") || document.getElementById("lightgooglegraph") || document.getElementById("movementgooglegraph"))
   {
     loadAndDrawSensorData();
     setInterval("loadAndDrawSensorData()",145*1000);

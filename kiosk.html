@@ -5,7 +5,10 @@
   <link rel="stylesheet" href="kiosk.css" type="text/css" />
   <script type="text/javascript" src="/jquery.min.js"></script>
   <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script-->
-  <!--script src="/purl.js"></script-->
+   <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+   <script type="text/javascript">
+      google.load('visualization', '1', {packages: ['corechart']});
+  </script>
   <script type="text/javascript" src="kiosk.js"></script>
  </head>
  <body style="max-width:900px; max-height:1440px;">
@@ -30,15 +33,9 @@
     <tr><td id="sensor_status" style="border:0px none black; margin-top:5px;">Lädt ...</td></tr>
     </table>
     </div>
-    <div class="sensorelem">
-     <img id="tempsensor" class="sensorimg" src="http://realraum.at/shmcache/temp0.png"/>
-    </div>
-    <div class="sensorelem">
-      <img id="lightsensor" class="sensorimg" src="http://realraum.at/shmcache/light0.png"/>
-    </div>
-    <div class="sensorelem">
-      <img id="movementsensor" class="sensorimg" src="http://realraum.at/shmcache/movement.png"/>
-    </div>
+    <div class="sensorelem" id="tempgooglegraph" style="height:300px;"></div>
+    <div class="sensorelem" id="lightgooglegraph" style="height:300px;"></div>
+  <div class="sensorelem" id="movementgooglegraph" style="height:300px;"></div>
   </div>
 
   </td><td style="vertical-align:top;">
