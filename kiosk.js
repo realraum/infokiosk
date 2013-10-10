@@ -180,9 +180,22 @@ function drawGauge(targetelem, label, temp, options) {
 }
 
 var linecharts = {}
-function drawLineGraph(targetelem, dataarray, options) {
+function drawLineGraph(targetelem, dataarray, options, x_is_epochdate) {
   if (dataarray) {
-      var data = google.visualization.arrayToDataTable(dataarray);
+      var data;
+      if (x_is_epochdate) {
+        data=new google.visualization.DataTable();
+	data.addColumn('datetime',dataarray[0][0]);
+        for (var c=1; c<dataarray[0].length; c++) {
+	  data.addColumn('number',dataarray[0][c]);
+        }
+	for (var r=1; r<dataarray.length; r++) {
+	  dataarray[r][0] = new Date(dataarray[r][0]*1000);
+	  data.addRow(dataarray[r]);
+        }
+      } else {
+        data = google.visualization.arrayToDataTable(dataarray);
+      }
       // Create and draw the visualization.
       if (targetelem)
       {
@@ -199,11 +212,11 @@ function drawLineGraph(targetelem, dataarray, options) {
 function loadAndDrawSensorData() {
   $.getJSON("https://realraum.at/shmcache/r3sensors.json", function(data){
     drawLineGraph(document.getElementById('tempgooglegraph'), data["TempSensorUpdate"],
-      {curveType: "function", title: 'Temperature Sensors', colors: ['#FF0000','#CC0033','#660000','#CC3333'], chartArea:{left:32,top:20,width:"88%",height:"83%"}, legend: {position: "none"}}  );
+      {curveType: "function", title: 'Temperature Sensors', colors: ['#FF0000','#CC0033','#660000','#CC3333'], chartArea:{left:32,top:20,width:"88%",height:"83%"}, legend: {position: "none"}} ,true);
     drawLineGraph(document.getElementById('lightgooglegraph'), data["IlluminationSensorUpdate"],
-        {curveType: "none", title: 'Illumination Sensors', vAxis: {maxValue: 1024, minValue:5}, chartArea:{left:32,top:20,width:"88%",height:"83%"}, legend: {position: "none"}}  );
+        {curveType: "none", title: 'Illumination Sensors', vAxis: {maxValue: 1024, minValue:5}, chartArea:{left:32,top:20,width:"88%",height:"83%"}, legend: {position: "none"}} ,true);
     drawLineGraph(document.getElementById('movementgooglegraph'), data["MovementSensorUpdate"],
-        {curveType: "none", title: 'Movement Sensors', vAxis: {maxValue: 10, minValue:0}, chartArea:{left:32,top:20,width:"88%",height:"83%"}, legend: {position: "none"}}  );
+        {curveType: "none", title: 'Movement Sensors', vAxis: {maxValue: 10, minValue:0}, chartArea:{left:32,top:20,width:"88%",height:"83%"}, legend: {position: "none"}} ,true);
     });
 }
 
