@@ -166,10 +166,10 @@ function loadCalendarMainPage()
 
 var gauges = {}
 function drawGauge(targetelem, label, temp, options) {
-    var data = google.visualization.arrayToDataTable([["Label", "Value"],[label,temp]]);
     // Create and draw the visualization.
     if (targetelem)
     {
+        var data = google.visualization.arrayToDataTable([["Label", "Value"],[label,temp]]);
         options["width"] = targetelem.getAttribute("width");
         options["height"] = targetelem.getAttribute("height");
 	if (!gauges.hasOwnProperty(targetelem.id)) {
@@ -216,7 +216,7 @@ function loadAndDrawSensorData() {
     drawLineGraph(document.getElementById('lightgooglegraph'), data["IlluminationSensorUpdate"],
         {curveType: "none", title: 'Illumination Sensors', vAxis: {maxValue: 1024, minValue:5}, chartArea:{left:32,top:20,width:"88%",height:"83%"}, legend: {position: "none"}} ,true);
     drawLineGraph(document.getElementById('movementgooglegraph'), data["MovementSensorUpdate"],
-        {curveType: "none", title: 'Movement Sensors', vAxis: {maxValue: 10, minValue:0}, chartArea:{left:32,top:20,width:"88%",height:"83%"}, legend: {position: "none"}} ,true);
+        {curveType: "function", title: 'Movement Sensors', vAxis: {maxValue: 10, minValue:0}, chartArea:{left:32,top:20,width:"88%",height:"83%"}, legend: {position: "none"}} ,true);
     });
 }
 
