@@ -207,11 +207,11 @@ function drawLineGraph(targetelem, dataarray, options, x_is_epochdate) {
 function loadAndDrawSensorData() {
   $.getJSON("https://realraum.at/shmcache/r3sensors.json", function(data){
     drawLineGraph(document.getElementById('tempgooglegraph'), data["TempSensorUpdate"],
-      {curveType: "function", title: 'Temperature Sensors', colors: ['#FF0000','#CC0033','#660000','#CC3333'], chartArea:{left:32,top:20,width:"88%",height:"83%"}, legend: {position: "none"}} ,true);
+      {curveType: "function", title: 'Temperature Sensors', colors: ['#FF0000','#CC0033','#660000','#CC3333'], vAxis:{viewWindow:{min:15,max:26}, viewWindowMode:"explicit"}, chartArea:{left:32,top:20,width:"88%",height:"78%"}, legend: {position: "none"}} ,true);
     drawLineGraph(document.getElementById('lightgooglegraph'), data["IlluminationSensorUpdate"],
-        {curveType: "none", title: 'Illumination Sensors', vAxis: {maxValue: 1024, minValue:5}, chartArea:{left:32,top:20,width:"88%",height:"83%"}, legend: {position: "none"}} ,true);
+        {curveType: "none", title: 'Illumination Sensors', vAxis: {maxValue: 1024, minValue:5}, chartArea:{left:32,top:20,width:"88%",height:"78%"}, legend: {position: "none"}} ,true);
     drawLineGraph(document.getElementById('movementgooglegraph'), data["MovementSensorUpdate"],
-        {curveType: "function", title: 'Movement Sensors', vAxis: {maxValue: 10, minValue:0}, chartArea:{left:32,top:20,width:"88%",height:"83%"}, legend: {position: "none"}} ,true);
+        {curveType: "function", title: 'Movement Sensors', vAxis: {maxValue: 10, minValue:0,viewWindowMode:"maximized"}, chartArea:{left:32,top:20,width:"88%",height:"78%"}, legend: {position: "none"}} ,true);
     });
 }
 
