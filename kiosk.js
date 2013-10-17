@@ -170,43 +170,38 @@ function drawGauge(targetelem, label, temp, options) {
     if (targetelem)
     {
         var data = google.visualization.arrayToDataTable([["Label", "Value"],[label,temp]]);
-        options["width"] = targetelem.getAttribute("width");
-        options["height"] = targetelem.getAttribute("height");
-	if (!gauges.hasOwnProperty(targetelem.id)) {
-        	gauges[targetelem.id] = new google.visualization.Gauge(targetelem);
-	}
+        if (!gauges.hasOwnProperty(targetelem.id)) {
+            gauges[targetelem.id] = new google.visualization.Gauge(targetelem);
+        }
         gauges[targetelem.id].draw(data, options);
     }
 }
 
 var linecharts = {}
 function drawLineGraph(targetelem, dataarray, options, x_is_epochdate) {
-  if (dataarray) {
-      var data;
-      if (x_is_epochdate) {
-        data=new google.visualization.DataTable();
-	data.addColumn('datetime',dataarray[0][0]);
-        for (var c=1; c<dataarray[0].length; c++) {
-	  data.addColumn('number',dataarray[0][c]);
-        }
-	for (var r=1; r<dataarray.length; r++) {
-	  dataarray[r][0] = new Date(dataarray[r][0]*1000);
-	  data.addRow(dataarray[r]);
-        }
-      } else {
-        data = google.visualization.arrayToDataTable(dataarray);
+  if (dataarray && targetelem) {
+    var data;
+    if (x_is_epochdate) {
+      data=new google.visualization.DataTable();
+      data.addColumn('datetime',dataarray[0][0]);
+      for (var c=1; c<dataarray[0].length; c++) {
+        data.addColumn('number',dataarray[0][c]);
       }
-      // Create and draw the visualization.
-      if (targetelem)
-      {
-          options["width"]= targetelem.getAttribute("width");
-          options["height"]=targetelem.getAttribute("height");
-	  if (!linecharts.hasOwnProperty(targetelem.id)) {
-              linecharts[targetelem.id] = new google.visualization.LineChart(targetelem);
-  	  }
-          linecharts[targetelem.id].draw(data, options);
-        }
+      for (var r=1; r<dataarray.length; r++) {
+        dataarray[r][0] = new Date(dataarray[r][0]*1000);
+        data.addRow(dataarray[r]);
+      }
+    } else {
+      data = google.visualization.arrayToDataTable(dataarray);
     }
+    // Create and draw the visualization.
+    options["width"]= targetelem.getAttribute("width");
+    options["height"]=targetelem.getAttribute("height");
+    if (!linecharts.hasOwnProperty(targetelem.id)) {
+      linecharts[targetelem.id] = new google.visualization.LineChart(targetelem);
+    }
+    linecharts[targetelem.id].draw(data, options);
+  }
 }
 
 function loadAndDrawSensorData() {
