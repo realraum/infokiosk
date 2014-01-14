@@ -1,0 +1,42 @@
+<html>
+  <head>
+  <meta charset="utf-8">
+  <title>Realraum Kiosk Seite</title>
+  <link rel="stylesheet" href="kiosk.css" type="text/css" />
+  <script type="text/javascript" src="/jquery.min.js"></script>
+  <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script-->
+   <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+   <script type="text/javascript">
+      google.load('visualization', '1', {packages: ['gauge']});
+  </script>
+  <script type="text/javascript" src="kiosk.js"></script>
+ </head>
+ <body style="max-height:768px; max-width:1366px; font-size:19px;">
+ <table border="0" cellpadding="0" cellspacing="0"><tr>
+ <td><div class="sensorgauges" style="margin-bottom:0px; padding-bottom:0px;">
+    <p class="topic">Sensorwerte</p>
+    <div id="anwesenheit_status_kiosk" style="height:100px; border:0px none black;">Lädt ...</div>
+    <div id="sensor_status" style="border:0px none black; margin-top:5px;">Lädt ...</div>
+    <div id="tempgauge" style="width: 240px; height: 240px; padding-left:5px; margin-bottom:-10px;"></div>
+    <div id="lightgauge" style="width: 240px; height: 240px; padding-left:5px; margin-bottom:-8px;"></div>
+   </div>
+ </td><td style="vertical-align:top;">
+  <!-- Calendar ------------------------ -->
+  <div class="calendar" style="height:17em; width:650px;">
+    <p class="topic">Veranstaltungskalender</p>
+    <div id="dateclock"></div>
+    <div id="grical_upcoming_kiosk">Kalendar lädt ...</div>
+  </div>
+  <iframe src="/wiki/doku.php?id=brockmanngassetodo#todo" style="width:645px; height:420px;">
+  </iframe>
+ </td>
+ <td style="vertical-align:top;">
+   <!-- Google Plus Wall ------------------------ -->
+   <div class="gpluswall" style="margin-left:auto; margin-right:auto;">
+    <p class="topic">Google+</p>
+    <div id="gplusevents">Lädt ...</div>
+   </td></tr>
+   </table>
+  </table>
+</body>
+</html>
