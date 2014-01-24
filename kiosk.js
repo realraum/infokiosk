@@ -112,27 +112,36 @@ function calendarItemEnhancer(data)
     for (var s=0; s<data.length; s++)
     {
       var when = "";
-      var dt = Date.parse(data[s].start+'T'+data[s].starttime);
-      if (Date.now() > dt)
+      var stime = data[s].starttime;
+      var dt;
+      if (stime) {
+        dt = Date.parse(data[s].start+'T'+data[s].starttime);
+      } else {
+        dt = Date.parse(data[s].start);
+      }
+      if (stime && Date.now() > dt)
       {
         when = "JETZT";
       }
       else
       {
         var weekday = weekday2str((new Date(dt)).getDay());
-        var stime = data[s].starttime;
         var month = data[s].start.substring(5,7);
         if (month[0] == '0')
           month = month[1];
         var dayofmonth = data[s].start.substring(8,10);
           if (dayofmonth[0] == '0')
           dayofmonth = dayofmonth[1];
-        while (stime.substring(stime.length-3,stime.length) == ":00")
-        {
-          stime=stime.substring(0,stime.length-3);
+        if (stime) {
+          while (stime.substring(stime.length-3,stime.length) == ":00")
+          {
+            stime=stime.substring(0,stime.length-3);
+          }
+          if (stime.length <= 2) { stime+="h"; }
+          when = weekday + " " + dayofmonth+"."+month +", "+stime;
+        } else {
+          when = weekday + " " + dayofmonth+"."+month;
         }
-        if (stime.length <= 2) { stime+="h"; }
-        when = weekday + " " + dayofmonth+"."+month +", "+stime;
       }
       data[s].when = when
     }
