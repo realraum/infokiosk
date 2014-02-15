@@ -224,6 +224,18 @@ function loadAndDrawSensorData() {
     });
 }
 
+function siNumberString(num,unit)
+{
+  var siid=""
+  var sisize=new Array([1e9,"G"],[1e6,"M"],[1e3,"K"]);
+  for (i=0; i<sisize.length; i++)
+  { 
+    if (num >= sisize[i][0]) { siid=sisize[i][1]; num=num/sisize[i][0]; break;}
+
+  }
+  return (Math.round(num*10)/10)+siid+unit;
+}
+
 function writeAnwesenheitStatus(data)
 {
   var html="";
@@ -241,13 +253,21 @@ function writeAnwesenheitStatus(data)
   }
   var anwesenheit_status_kiosk = document.getElementById('anwesenheit_status_kiosk');
   var anwesenheit_status_frontpage = document.getElementById('anwesenheit_status');
+  var statusage = parseInt((new Date()).getTime()/1000) - data.lastchange;
+  var statusagestatus = "";
+  if (statusage > 600)
+  {
+    //var statusagestatus = '<tr style="height:5px; overflow:hidden; "><td colspan="2"></td><td style="text-align:right; font-size:5%; background:red;">Status older than ' + siNumberString(statusage,"s") + '</td></tr>';
+    var statusagestatus = '<br/><div style="text-align:right; float:right; margin:0; padding:1px; line-height:105%; font-size:65%; background:red;">Status older than ' + siNumberString(statusage,"s") + '</div>';
+  }
   if (anwesenheit_status_kiosk)
   {
     anwesenheit_status_kiosk.innerHTML='<table border="0" cellpadding="0" cellspacing="0" width="100%" height="100"><tr><td style="width:100px;"><img style="float:left;" src="'+iconuri+'" height="100" width="100"/></td><td style="width:4px;"></td><td class="anwesenheitsstatus" style="background-color:'+statuscolor+'; ">'+data.status+'</td></tr></table>';
   }
   if (anwesenheit_status_frontpage)
   {
-    anwesenheit_status_frontpage.innerHTML='<table border="0" cellpadding="0" cellspacing="0" width="100%" height="42"><tr><td style="width:42px;"><img style="float:left;" src="'+iconuri+'" height="42" width="42"/></td><td style="width:4px;"></td><td style="background-color:'+statuscolor+'; height:42px; text-align:center; margin-left:48px; margin-right:auto; font-size:larger; font-weight:bold; vertical-align:middle; display:table-cell;">'+data.status+'</td></tr></table>';
+    //anwesenheit_status_frontpage.innerHTML='<table border="0" cellpadding="0" cellspacing="0" width="100%" height="42"><tr><td style="width:42px;"><img style="float:left;" src="'+iconuri+'" height="42" width="42"/></td><td style="width:4px;"></td><td style="background-color:'+statuscolor+'; height:42px; text-align:center; margin-left:48px; margin-right:auto; font-size:larger; font-weight:bold; vertical-align:middle; display:table-cell;">'+data.status+'</td></tr>'+statusagestatus+'</table>';
+    anwesenheit_status_frontpage.innerHTML='<table border="0" cellpadding="0" cellspacing="0" width="100%" height="42"><tr><td style="width:42px;"><img style="float:left;" src="'+iconuri+'" height="42" width="42"/></td><td style="width:4px;"></td><td style="background-color:'+statuscolor+'; height:42px; text-align:center; margin-left:48px; margin-right:auto; font-size:larger; font-weight:bold; vertical-align:middle; display:table-cell;">'+data.status+statusagestatus+'</td></tr></table>';
   }
 
   if (data.sensors)
