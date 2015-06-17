@@ -56,6 +56,17 @@ div.headerphoto2 {
   margin-top:10px;
 }
 
+div.secondbg {
+  max-width: 80%;
+  margin-left:auto;
+  margin-right:auto;
+  background:lightgray;
+  padding:8px;
+  border-radius:9px;
+}
+
+div.wikilink,
+div.statusandaddress,
 div.contentborder,
 div.calendar,
 div.sensorgraphs,
