@@ -458,7 +458,7 @@ $(document).ready(function()
   }
   if (document.getElementById("gplusevents"))
   {
-    loadGooglePlusEvents();
-    setInterval("loadGooglePlusEvents()", 1207*1000);
+    //loadGooglePlusEvents();
+    //setInterval("loadGooglePlusEvents()", 1207*1000);
   }
 });
