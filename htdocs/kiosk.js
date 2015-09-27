@@ -269,7 +269,7 @@ function writeAnwesenheitStatus(data)
   if (anwesenheit_status_frontpage)
   {
     //anwesenheit_status_frontpage.innerHTML='<table border="0" cellpadding="0" cellspacing="0" width="100%" height="42"><tr><td style="width:42px;"><img style="float:left;" src="'+iconuri+'" height="42" width="42"/></td><td style="width:4px;"></td><td style="background-color:'+statuscolor+'; height:42px; text-align:center; margin-left:48px; margin-right:auto; font-size:larger; font-weight:bold; vertical-align:middle; display:table-cell;">'+data.status+'</td></tr>'+statusagestatus+'</table>';
-    anwesenheit_status_frontpage.innerHTML='<table border="0" cellpadding="0" cellspacing="0" width="100%" height="42"><tr><td style="width:42px;"><img style="float:left;" src="'+iconuri+'" height="42" width="42"/></td><td style="width:4px;"></td><td style="background-color:'+statuscolor+'; height:42px; text-align:center; margin-left:48px; margin-right:auto; font-size:larger; font-weight:bold; vertical-align:middle; display:table-cell;">'+data.status+statusagestatus+'</td></tr></table>';
+    anwesenheit_status_frontpage.innerHTML='<table border="0" cellpadding="0" cellspacing="0" style="padding:0; margin:0: height:42px; width:100%;"><tr><td style="width:42px;"><img style="float:left;" src="'+iconuri+'" height="42" width="42"/></td><td style="width:4px;"></td><td style="background-color:'+statuscolor+'; height:42px; text-align:center; margin-left:48px; margin-right:auto; font-size:larger; font-weight:bold; vertical-align:middle; display:table-cell;">'+data.status+statusagestatus+'</td></tr></table>';
   }
 
   if (data.sensors)
