@@ -1,3 +1,5 @@
+var $r3jq = jQuery.noConflict();
+
 function min(a,b)
 {
 	if (a > b)
@@ -9,7 +11,7 @@ function min(a,b)
 function writeGooglePlusEvents(data, elem)
 {
   var ghtml = "";
-  //var gplusimgwidth = parseInt($('<table class="gplusimg" />').css("width"));
+  //var gplusimgwidth = parseInt($r3jq('<table class="gplusimg" />').css("width"));
   var gplusimgwidth = 495;
   var minimgwidth=78;
   for (var i=0; i< data.items.length; i++)
@@ -85,7 +87,7 @@ function loadGooglePlusEvents()
   var gpak = "AIzaSyD9xBFM-KWwSYBgZ8VzftJ5wYYvurOxEHg";
   var gplusuri = "https://www.googleapis.com/plus/v1/people/113737596421797426873/activities/public?maxResults=4&key="+gpak;
   var gpluscontainer=document.getElementById("gplusevents");
-  $.getJSON(gplusuri, function(data){
+  $r3jq.getJSON(gplusuri, function(data){
     writeGooglePlusEvents(data, gpluscontainer);
   });
 }
@@ -151,9 +153,9 @@ function calendarItemEnhancer(data)
 function loadCalendarKiosk()
 {
   var calcontainer=document.getElementById("grical_upcoming_kiosk");
-  $.getJSON('/shmcache/grical_realraum.json', function(data){
+  $r3jq.getJSON('/shmcache/grical_realraum.json', function(data){
     var calhtml = "";
-    $.each(calendarItemEnhancer(data), function(index, itm) {
+    $r3jq.each(calendarItemEnhancer(data), function(index, itm) {
       calhtml += '<li class="level1">'+itm.when+' - <span class="r3red">'+itm.title+'</span></li>'+"\n";
     });
     calcontainer.innerHTML='<ul>'+calhtml+'</ul>';
@@ -164,9 +166,9 @@ function loadCalendarMainPage()
 {
   //old URI: //grical.realraum.at/s/?query=!realraum&limit=9&view=json
   var calcontainer=document.getElementById("grical_upcoming");
-  $.getJSON('/shmcache/grical_realraum.json', function(data){
+  $r3jq.getJSON('/shmcache/grical_realraum.json', function(data){
     var calhtml = "";
-    $.each(calendarItemEnhancer(data), function(index, itm) {
+    $r3jq.each(calendarItemEnhancer(data), function(index, itm) {
       calhtml += '<li class="level1"><div class="li">'+itm.when+' - <a href="'+itm.url+'" class="urlextern" title="'+itm.title+'"  rel="nofollow">'+itm.title+'</a></div></li>'+"\n";
     });
     calcontainer.innerHTML='<ul>'+calhtml+'</ul>';
@@ -214,7 +216,7 @@ function drawLineGraph(targetelem, dataarray, options, x_is_epochdate) {
 }
 
 function loadAndDrawSensorData() {
-  $.getJSON("https://realraum.at/shmcache/r3sensors.json", function(data){
+  $r3jq.getJSON("https://realraum.at/shmcache/r3sensors.json", function(data){
     drawLineGraph(document.getElementById('tempgooglegraph'), data["TempSensorUpdate"],
       {curveType: "function", title: 'Temperature Sensors', colors: ['#FF0000','#CC0033','#660000','#CC3333'], vAxis:{viewWindow:{min:15,max:26}, viewWindowMode:"explicit"}, chartArea:{left:32,top:20,width:"88%",height:"78%"}, legend: {position: "none"}} ,true);
     drawLineGraph(document.getElementById('lightgooglegraph'), data["IlluminationSensorUpdate"],
@@ -275,7 +277,7 @@ function writeAnwesenheitStatus(data)
     if (data.sensors.temperature)
     {
       sensorstd+='<td class="sensorstatus"><b>Temperatur</b>';
-      $.each( data.sensors.temperature, function(s, sensorobj) {
+      $r3jq.each( data.sensors.temperature, function(s, sensorobj) {
         sensorstd+='<br/>'+sensorobj.location+': '+sensorobj.value.toFixed(2)+sensorobj.unit;
 		drawGauge(document.getElementById('tempgauge'), "Temp "+sensorobj.location, sensorobj.value, {redFrom: 33, redTo: 40, yellowFrom:29, yellowTo: 33,  minorTicks: 4, min:0, max:40});
       });
@@ -284,7 +286,7 @@ function writeAnwesenheitStatus(data)
     if (data.sensors.ext_illumination)
     {
       sensorstd+='<td class="sensorstatus"><b>Licht</b>';
-      $.each( data.sensors.ext_illumination, function(s, sensorobj) {
+      $r3jq.each( data.sensors.ext_illumination, function(s, sensorobj) {
         sensorstd+='<br/>'+sensorobj.location+': '+sensorobj.value;
         drawGauge(document.getElementById('lightgauge'), "Licht "+sensorobj.location, sensorobj.value, {redFrom: 950, redTo: 1024,yellowFrom:0, yellowTo: 200,minorTicks: 4, min:0, max:1024});
       });
@@ -293,7 +295,7 @@ function writeAnwesenheitStatus(data)
     if (data.sensors.door_locked)
     {
       sensorstd+='<td class="sensorstatus"><b>Eingangstür</b>';
-      $.each( data.sensors.door_locked, function(s, sensorobj)  {
+      $r3jq.each( data.sensors.door_locked, function(s, sensorobj)  {
         var lockstatus="Auf";
         if (sensorobj.value) { lockstatus = "Zu"; }
         sensorstd+='<br/>'+sensorobj.location+': '+lockstatus;
@@ -303,7 +305,7 @@ function writeAnwesenheitStatus(data)
     if (data.sensors.ext_door_ajar)
     {
       sensorstd+='<td class="sensorstatus"><b>Türkontakt</b>';
-      $.each( data.sensors.ext_door_ajar, function(s, sensorobj)  {
+      $r3jq.each( data.sensors.ext_door_ajar, function(s, sensorobj)  {
         var lockstatus="Auf";
         if (sensorobj.value) { lockstatus = "Zu"; }
         sensorstd+='<br/>'+sensorobj.location+': '+lockstatus;
@@ -313,7 +315,7 @@ function writeAnwesenheitStatus(data)
     if (data.sensors.ext_dust)
     {
       sensorstd+='<td class="sensorstatus"><b>Staub</b>';
-      $.each( data.sensors.ext_dust, function(s, sensorobj) {
+      $r3jq.each( data.sensors.ext_dust, function(s, sensorobj) {
         sensorstd+='<br/>'+sensorobj.location+': '+sensorobj.value+sensorobj.unit+'</td>';
       });
       sensorstd+='</td>';
@@ -335,7 +337,7 @@ function updateAnwesenheitStatus()
  //google chrome workaround
  //req.setRequestHeader("googlechromefix","");
  //req.send(null);
- var jqxhr = $.getJSON(url, writeAnwesenheitStatus);
+ var jqxhr = $r3jq.getJSON(url, writeAnwesenheitStatus);
 }
 
 function updateDateClock(now)
@@ -348,18 +350,18 @@ function updateDateClock(now)
   datetimestr += (now.getHours() > 9 ? ' ' : ' 0') + now.getHours();
   datetimestr += (now.getMinutes() > 9 ? ':' : ':0') + now.getMinutes();
   datetimestr += (now.getSeconds() > 9 ? ':' : ':0') + now.getSeconds();
-  $('#dateclock').html(datetimestr);
+  $r3jq('#dateclock').html(datetimestr);
 }
 
 function highlightEntry(idx, color, value)
 {
   if(value == 0) {
     if(idx%2 == 0)
-      $('#upnext' + idx).css('background-color', 'white');
+      $r3jq('#upnext' + idx).css('background-color', 'white');
     else
-      $('#upnext' + idx).css('background-color', '#E0E0E0');
+      $r3jq('#upnext' + idx).css('background-color', '#E0E0E0');
   } else {
-    $('#upnext' + idx).css('background-color', color);
+    $r3jq('#upnext' + idx).css('background-color', color);
   }
 }
 
@@ -428,7 +430,7 @@ function reloadImg(element)
     element.src = img_orig_src[element.id] + "?dt="+Math.floor(new Date().getTime() / 1000).toString();
 }
 
-$(document).ready(function()
+$r3jq(document).ready(function()
 {
   updateAnwesenheitStatus();
   setInterval("updateAnwesenheitStatus()", 10*1000);
