@@ -173,6 +173,16 @@ td.sensorstatus {
   font-size:66%;
 }
 
+div.sensorstatus {
+  width:auto;
+  padding:5px;
+  float:left;  
+  text-align:left;
+  vertical-align:middle;
+  background-color: white;
+  font-size:66%;
+}
+
 div.sensorelem {
   display:block;
   width:397px;

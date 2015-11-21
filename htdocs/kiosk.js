@@ -242,7 +242,7 @@ function writeAnwesenheitStatus(data)
 {
   var html="";
   var sensorshtml="";
-  var sensorstd="";
+  var sensorsdiv="";
   if (data.open)
   {
    iconuri=data.icon.open;
@@ -275,56 +275,80 @@ function writeAnwesenheitStatus(data)
 
   if (data.sensors)
   {
-    if (data.sensors.temperature)
-    {
-      sensorstd+='<td class="sensorstatus"><b>Temperatur</b>';
-      $r3jq.each( data.sensors.temperature, function(s, sensorobj) {
-        sensorstd+='<br/>'+sensorobj.location+': '+sensorobj.value.toFixed(2)+sensorobj.unit;
-		drawGauge(document.getElementById('tempgauge'), "Temp "+sensorobj.location, sensorobj.value, {redFrom: 33, redTo: 40, yellowFrom:29, yellowTo: 33,  minorTicks: 4, min:0, max:40});
-      });
-      sensorstd+='</td>';
-    }
-    if (data.sensors.ext_illumination)
-    {
-      sensorstd+='<td class="sensorstatus"><b>Licht</b>';
-      $r3jq.each( data.sensors.ext_illumination, function(s, sensorobj) {
-        sensorstd+='<br/>'+sensorobj.location+': '+sensorobj.value;
-        drawGauge(document.getElementById('lightgauge'), "Licht "+sensorobj.location, sensorobj.value, {redFrom: 950, redTo: 1024,yellowFrom:0, yellowTo: 200,minorTicks: 4, min:0, max:1024});
-      });
-      sensorstd+='</td>';
-    }
     if (data.sensors.door_locked)
     {
-      sensorstd+='<td class="sensorstatus"><b>Eingangstür</b>';
+      sensorsdiv+='<div class="sensorstatus"><b><u>Eingangstür</u></b>';
       $r3jq.each( data.sensors.door_locked, function(s, sensorobj)  {
         var lockstatus="Auf";
         if (sensorobj.value) { lockstatus = "Zu"; }
-        sensorstd+='<br/>'+sensorobj.location+': '+lockstatus;
+        sensorsdiv+='<br/>'+sensorobj.location+': '+lockstatus;
       });
-      sensorstd+='</td>';
+      sensorsdiv+='</div>';
     }
     if (data.sensors.ext_door_ajar)
     {
-      sensorstd+='<td class="sensorstatus"><b>Türkontakt</b>';
+      sensorsdiv+='<div class="sensorstatus"><b><u>Türkontakt</u></b>';
       $r3jq.each( data.sensors.ext_door_ajar, function(s, sensorobj)  {
         var lockstatus="Auf";
         if (sensorobj.value) { lockstatus = "Zu"; }
-        sensorstd+='<br/>'+sensorobj.location+': '+lockstatus;
+        sensorsdiv+='<br/>'+sensorobj.location+': '+lockstatus;
       });
-      sensorstd+='</td>';
+      sensorsdiv+='</div>';
+    }
+    if (data.sensors.temperature)
+    {
+      sensorsdiv+='<div class="sensorstatus"><b><u>Temperatur</u></b>';
+      $r3jq.each( data.sensors.temperature, function(s, sensorobj) {
+        sensorsdiv+='<br/>'+sensorobj.location+': '+sensorobj.value.toFixed(2)+sensorobj.unit;
+    drawGauge(document.getElementById('tempgauge'), "Temp "+sensorobj.location, sensorobj.value, {redFrom: 33, redTo: 40, yellowFrom:29, yellowTo: 33,  minorTicks: 4, min:0, max:40});
+      });
+      sensorsdiv+='</div>';
+    }
+    if (data.sensors.ext_illumination)
+    {
+      sensorsdiv+='<div class="sensorstatus"><b><u>Licht</u></b>';
+      $r3jq.each( data.sensors.ext_illumination, function(s, sensorobj) {
+        sensorsdiv+='<br/>'+sensorobj.location+': '+sensorobj.value;
+        drawGauge(document.getElementById('lightgauge'), "Licht "+sensorobj.location, sensorobj.value, {redFrom: 950, redTo: 1024,yellowFrom:0, yellowTo: 200,minorTicks: 4, min:0, max:1024});
+      });
+      sensorsdiv+='</div>';
     }
     if (data.sensors.ext_dust)
     {
-      sensorstd+='<td class="sensorstatus"><b>Staub</b>';
+      sensorsdiv+='<div class="sensorstatus"><b><u>Staub</u></b>';
       $r3jq.each( data.sensors.ext_dust, function(s, sensorobj) {
-        sensorstd+='<br/>'+sensorobj.location+': '+sensorobj.value+sensorobj.unit+'</td>';
+        sensorsdiv+='<br/>'+sensorobj.location+': '+sensorobj.value+sensorobj.unit+'</div>';
       });
-      sensorstd+='</td>';
+      sensorsdiv+='</div>';
 
     }
-    if (sensorstd != "")
+    if (data.sensors.humidity)
     {
-      sensorshtml='<table border="0" cellpadding="0" cellspacing="0" width="100%"><tr>'+sensorstd+'</tr></table>';
+      sensorsdiv+='<div class="sensorstatus"><b><u>Humidity</u></b>';
+      $r3jq.each( data.sensors.humidity, function(s, sensorobj) {
+        sensorsdiv+='<br/>'+sensorobj.location+': '+sensorobj.value+sensorobj.unit+'</div>';
+      });
+      sensorsdiv+='</div>';
+    }
+    if (data.sensors.power_consumption)
+    {
+      sensorsdiv+='<div class="sensorstatus"><b><u>Stromverbrauch</u></b>';
+      $r3jq.each( data.sensors.power_consumption, function(s, sensorobj) {
+        sensorsdiv+='<br/>'+sensorobj.location+': '+sensorobj.value+sensorobj.unit+'</div>';
+      });
+      sensorsdiv+='</div>';
+    }
+    if (data.sensors.ext_lasercutter_hot)
+    {
+      sensorsdiv+='<div class="sensorstatus"><b><u>Lasercutter</u></b>';
+      $r3jq.each( data.sensors.ext_lasercutter_hot, function(s, sensorobj) {
+        sensorsdiv+='<br/>'+sensorobj.location+': '+(sensorobj.value ? "InUse": "NotInUse")+'</div>';
+      });
+      sensorsdiv+='</div>';
+    }    
+    if (sensorsdiv != "")
+    {
+      sensorshtml='<div style="width:100%; display:inline-block;">'+sensorsdiv+'</div>';
       document.getElementById('sensor_status').innerHTML=sensorshtml;
     }
   }
@@ -333,7 +357,8 @@ function writeAnwesenheitStatus(data)
 function updateAnwesenheitStatus()
 {
  //var req = new XMLHttpRequest();
- url = "/status.json";
+ //url = "/status.json";
+ url = "http://realraum.at/status.json";
  //req.open("GET", url ,false);
  //google chrome workaround
  //req.setRequestHeader("googlechromefix","");
@@ -382,12 +407,12 @@ function showError(XMLHttpRequest, textStatus, errorThrown)
   alert("Error: " + textStatus);
 }
 
-function updateSensors()
-{
-  reloadImg(document.getElementById("tempsensor"));
-  reloadImg(document.getElementById("movementsensor"));
-  reloadImg(document.getElementById("lightsensor"));
-}
+// function updateSensors()
+// {
+//   reloadImg(document.getElementById("tempsensor"));
+//   reloadImg(document.getElementById("movementsensor"));
+//   reloadImg(document.getElementById("lightsensor"));
+// }
 
 function IsImageOk(img) {
     if (!img.complete)
@@ -450,10 +475,6 @@ $r3jq(document).ready(function()
     loadCalendarMainPage();
     setInterval("loadCalendarMainPage()", 123*1000);
   }
-//  if (document.getElementById("sensorgraphs"))
-//  {
-//    setInterval("updateSensors()",145*1000);
-//  }
   if (document.getElementById("tempgooglegraph") || document.getElementById("lightgooglegraph") || document.getElementById("movementgooglegraph"))
   {
     loadAndDrawSensorData();
