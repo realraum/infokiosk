@@ -343,7 +343,9 @@ function writeAnwesenheitStatus(data)
     {
       sensorsdiv+='<div class="sensorstatus"><b><u>Lasercutter</u></b>';
       $r3jq.each( data.sensors.ext_lasercutter_hot, function(s, sensorobj) {
-        sensorsdiv+='<br/>'+sensorobj.location+': '+(sensorobj.value ? "InUse": "NotInUse")+'</div>';
+        var use = "NotInUse";
+        if (sensorobj.value) {use="InUse";}
+        sensorsdiv+='<br/>'+sensorobj.location+': '+use+'</div>';
       });
       sensorsdiv+='</div>';
     }
