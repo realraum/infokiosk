@@ -317,16 +317,15 @@ function writeAnwesenheitStatus(data)
     {
       sensorsdiv+='<div class="sensorstatus"><b><u>Staub</u></b>';
       $r3jq.each( data.sensors.ext_dust, function(s, sensorobj) {
-        sensorsdiv+='<br/>'+sensorobj.location+': '+sensorobj.value+sensorobj.unit+'</div>';
+        sensorsdiv+='<br/>'+sensorobj.location+': '+sensorobj.value+sensorobj.unit;
       });
       sensorsdiv+='</div>';
-
     }
     if (data.sensors.humidity)
     {
       sensorsdiv+='<div class="sensorstatus"><b><u>Humidity</u></b>';
       $r3jq.each( data.sensors.humidity, function(s, sensorobj) {
-        sensorsdiv+='<br/>'+sensorobj.location+': '+sensorobj.value+sensorobj.unit+'</div>';
+        sensorsdiv+='<br/>'+sensorobj.location+': '+sensorobj.value+sensorobj.unit;
         drawGauge($r3jq('.humiditygauge[sensorlocation=\''+sensorobj.location+'\']').get()[0], "Humidity "+sensorobj.location, sensorobj.value, {redFrom: 90, redTo: 100,yellowFrom:0, yellowTo:10 ,minorTicks: 5, min:0, max:100});
       });
       sensorsdiv+='</div>';
@@ -335,7 +334,7 @@ function writeAnwesenheitStatus(data)
     {
       sensorsdiv+='<div class="sensorstatus"><b><u>Stromverbrauch</u></b>';
       $r3jq.each( data.sensors.power_consumption, function(s, sensorobj) {
-        sensorsdiv+='<br/>'+sensorobj.location+': '+sensorobj.value+sensorobj.unit+'</div>';
+        sensorsdiv+='<br/>'+sensorobj.location+': '+sensorobj.value+sensorobj.unit;
       });
       sensorsdiv+='</div>';
     }
@@ -351,7 +350,7 @@ function writeAnwesenheitStatus(data)
     }
     if (sensorsdiv != "")
     {
-      sensorshtml='<div style="width:100%; display:inline-block;">'+sensorsdiv+'</div>';
+      sensorshtml='<div style="width:100%; display:inline-block;">'+sensorsdiv;
       document.getElementById('sensor_status').innerHTML=sensorshtml;
     }
   }
