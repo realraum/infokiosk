@@ -2,10 +2,10 @@ var $r3jq = jQuery.noConflict();
 
 function min(a,b)
 {
-	if (a > b)
-		return b;
-	else
-		return a;
+    if (a > b)
+        return b;
+    else
+        return a;
 }
 
 function writeGooglePlusEvents(data, elem)
@@ -52,27 +52,27 @@ function writeGooglePlusEvents(data, elem)
       if (noteimgs.length > 3)
       {
               var gplusimgmaxwidth = gplusimgwidth - (minimgwidth * ((noteimgs.length -1) / 3));
-	      bigimglimit = "max-height:"+(minimgwidth*3)+"px; max-width:"+gplusimgmaxwidth+"px;"
-	      ghtml += '<td><img class="gplusimg" style="'+bigimglimit+'" src="'+noteimgs[0]+'"/></td>';
-	      for (var ni=1; ni<noteimgs.length; ni+=3)
-	      {
-		  ghtml += '<td>';
-		  var niimax = min(noteimgs.length, ni+3);
-		  for (var nii=ni; nii<niimax; nii++)
-		  {
-			ghtml += '<img class="gplusimg" style="max-width:'+minimgwidth+'px; max-height:'+minimgwidth+'px;" src="'+noteimgs[nii]+'"/><br/>';
-		  }
-	          ghtml += '</td>';
+          bigimglimit = "max-height:"+(minimgwidth*3)+"px; max-width:"+gplusimgmaxwidth+"px;"
+          ghtml += '<td><img class="gplusimg" style="'+bigimglimit+'" src="'+noteimgs[0]+'"/></td>';
+          for (var ni=1; ni<noteimgs.length; ni+=3)
+          {
+          ghtml += '<td>';
+          var niimax = min(noteimgs.length, ni+3);
+          for (var nii=ni; nii<niimax; nii++)
+          {
+            ghtml += '<img class="gplusimg" style="max-width:'+minimgwidth+'px; max-height:'+minimgwidth+'px;" src="'+noteimgs[nii]+'"/><br/>';
+          }
+              ghtml += '</td>';
              }
       }
       else
       {
              var gplusimgmaxwidth = gplusimgwidth / noteimgs.length;
-	     bigimglimit = "max-width:"+gplusimgmaxwidth+"px;"
+         bigimglimit = "max-width:"+gplusimgmaxwidth+"px;"
              for (var ni=0; ni<noteimgs.length; ni++)
-	     {
-		ghtml += '<td><img class="gplusimg" style="'+bigimglimit+'" src="'+noteimgs[ni]+'"/></td>';
-	     }
+         {
+        ghtml += '<td><img class="gplusimg" style="'+bigimglimit+'" src="'+noteimgs[ni]+'"/></td>';
+         }
       }
       ghtml += '</tr></table>';
     }
@@ -182,9 +182,9 @@ function drawGauge(targetelem, label, temp, options) {
     {
         var data = google.visualization.arrayToDataTable([["Label", "Value"],[label,temp]]);
         if (!gauges.hasOwnProperty(targetelem.id)) {
-            gauges[targetelem.id] = new google.visualization.Gauge(targetelem);
+            gauges[targetelem] = new google.visualization.Gauge(targetelem);
         }
-        gauges[targetelem.id].draw(data, options);
+        gauges[targetelem].draw(data, options);
     }
 }
 
@@ -231,7 +231,7 @@ function siNumberString(num,unit)
   var siid=""
   var sisize=new Array([1e9,"G"],[1e6,"M"],[1e3,"K"]);
   for (i=0; i<sisize.length; i++)
-  { 
+  {
     if (num >= sisize[i][0]) { siid=sisize[i][1]; num=num/sisize[i][0]; break;}
 
   }
@@ -300,7 +300,7 @@ function writeAnwesenheitStatus(data)
       sensorsdiv+='<div class="sensorstatus"><b><u>Temperatur</u></b>';
       $r3jq.each( data.sensors.temperature, function(s, sensorobj) {
         sensorsdiv+='<br/>'+sensorobj.location+': '+sensorobj.value.toFixed(2)+sensorobj.unit;
-    drawGauge(document.getElementById('tempgauge'), "Temp "+sensorobj.location, sensorobj.value, {redFrom: 33, redTo: 40, yellowFrom:29, yellowTo: 33,  minorTicks: 4, min:0, max:40});
+        drawGauge($r3jq('.tempgauge[sensorlocation=\''+sensorobj.location+'\']').get()[0], "Temp "+sensorobj.location, sensorobj.value, {redFrom: 33, redTo: 40, yellowFrom:29, yellowTo: 33,  minorTicks: 4, min:0, max:40});
       });
       sensorsdiv+='</div>';
     }
@@ -309,7 +309,7 @@ function writeAnwesenheitStatus(data)
       sensorsdiv+='<div class="sensorstatus"><b><u>Licht</u></b>';
       $r3jq.each( data.sensors.ext_illumination, function(s, sensorobj) {
         sensorsdiv+='<br/>'+sensorobj.location+': '+sensorobj.value;
-        drawGauge(document.getElementById('lightgauge'), "Licht "+sensorobj.location, sensorobj.value, {redFrom: 950, redTo: 1024,yellowFrom:0, yellowTo: 200,minorTicks: 4, min:0, max:1024});
+        drawGauge($r3jq('.lightgauge[sensorlocation=\''+sensorobj.location+'\']').get()[0], "Temp "+sensorobj.location, sensorobj.value, {redFrom: 950, redTo: 1024,yellowFrom:0, yellowTo: 200,minorTicks: 4, min:0, max:1024});
       });
       sensorsdiv+='</div>';
     }
@@ -327,6 +327,7 @@ function writeAnwesenheitStatus(data)
       sensorsdiv+='<div class="sensorstatus"><b><u>Humidity</u></b>';
       $r3jq.each( data.sensors.humidity, function(s, sensorobj) {
         sensorsdiv+='<br/>'+sensorobj.location+': '+sensorobj.value+sensorobj.unit+'</div>';
+        drawGauge($r3jq('.humiditygauge[sensorlocation=\''+sensorobj.location+'\']').get()[0], "Humidity "+sensorobj.location, sensorobj.value, {redFrom: 90, redTo: 100,yellowFrom:0, yellowTo:10 ,minorTicks: 5, min:0, max:100});
       });
       sensorsdiv+='</div>';
     }
@@ -345,7 +346,7 @@ function writeAnwesenheitStatus(data)
         sensorsdiv+='<br/>'+sensorobj.location+': '+(sensorobj.value ? "InUse": "NotInUse")+'</div>';
       });
       sensorsdiv+='</div>';
-    }    
+    }
     if (sensorsdiv != "")
     {
       sensorshtml='<div style="width:100%; display:inline-block;">'+sensorsdiv+'</div>';
