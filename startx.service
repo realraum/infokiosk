@@ -1,0 +1,13 @@
+[Unit]
+Description=startx as user
+Wants=network.target
+
+[Service]
+Nice=10
+Type=simple
+Restart=always
+ExecStart=/usr/bin/startx
+SyslogIdentifier=%i
+
+[Install]
+WantedBy=default.target

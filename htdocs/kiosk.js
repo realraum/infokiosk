@@ -273,6 +273,16 @@ function writeAnwesenheitStatus(data)
     anwesenheit_status_frontpage.innerHTML='<div style="height:42px; width:100%;"><img style="float:left;" src="'+iconuri+'" height="42" width="42"/><div style="background-color:'+statuscolor+'; height:42px; line-height: 42px; text-align:center; vertical-align: middle; margin-left:48px; margin-right:auto; font-size:larger; font-weight:bold;">'+data.status+statusagestatus+'</div></div>';
   }
 
+  var evtstatuselem = document.getElementById('event_status');
+  if (evtstatuselem) {
+    if (data.events)
+    {
+
+    } else {
+      evtstatuselem.innerHTML="";
+    }
+  }
+
   if (data.sensors)
   {
     if (data.sensors.door_locked)
