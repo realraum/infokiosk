@@ -6,7 +6,7 @@ Wants=network.target
 Nice=10
 Type=simple
 Restart=always
-ExecStart=/usr/bin/startx
+ExecStart=/usr/bin/xinit /usr/local/bin/start-kiosk.sh
 SyslogIdentifier=%i
 
 [Install]
