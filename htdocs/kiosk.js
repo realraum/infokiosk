@@ -370,7 +370,7 @@ function updateAnwesenheitStatus()
 {
  //var req = new XMLHttpRequest();
  //url = "/status.json";
- url = "http://realraum.at/status.json";
+ url = "//realraum.at/status.json";
  //req.open("GET", url ,false);
  //google chrome workaround
  //req.setRequestHeader("googlechromefix","");
