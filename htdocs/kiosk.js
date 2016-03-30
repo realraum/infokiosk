@@ -348,6 +348,24 @@ function writeAnwesenheitStatus(data)
       });
       sensorsdiv+='</div>';
     }
+    var battcharge = {};
+    if (data.sensors.ext_batterycharge)
+    {
+      $r3jq.each( data.sensors.ext_batterycharge, function(s, sensorobj) {
+        battcharge[sensorobj.location] = sensorobj.value+sensorobj.unit;
+      });
+    }
+    if (data.sensors.ext_voltage)
+    {
+      sensorsdiv+='<div class="sensorstatus"><b><u>Spannung</u></b>';
+      $r3jq.each( data.sensors.ext_voltage, function(s, sensorobj) {
+        sensorsdiv+='<br/>'+sensorobj.location+': '+sensorobj.value+sensorobj.unit;
+        if (battcharge[sensorobj.location]) {
+          sensorsdiv+=' ('+battcharge[sensorobj.location]+')';
+        }
+      });
+      sensorsdiv+='</div>';
+    }
     if (data.sensors.ext_lasercutter_hot)
     {
       sensorsdiv+='<div class="sensorstatus"><b><u>Lasercutter</u></b>';
