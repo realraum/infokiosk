@@ -1,0 +1,38 @@
+<html>
+  <head>
+  <meta charset="utf-8">
+  <title>Realraum Kiosk Seite</title>
+  <link rel="stylesheet" href="kiosk.css" type="text/css" />
+  <script type="text/javascript" src="/js/jquery/jquery.min.js"></script>
+  <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script-->
+   <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  <script type="text/javascript" src="kiosk.js"></script>
+ </head>
+ <body style="max-width:900px; max-height:1440px;">
+ <!-- Sensor Data ------------------------ -->
+  <div class="sensorgraphs">
+    <p class="topic">Sensordaten</p>
+    <div class="sensorelem">
+    <table class="status" style="">
+    <tr><td id="anwesenheit_status_kiosk" style="height:100px; border:0px none black;">Lädt ...</td></tr>
+    <tr><td id="sensor_status" style="border:0px none black; margin-top:5px;">Lädt ...</td></tr>
+    </table>
+    </div>
+    <div class="sensorelem" id="tempgooglegraph" style="height:300px;"></div>
+    <div class="sensorelem" id="lightgooglegraph" style="height:300px;"></div>
+  <div class="sensorelem" id="movementgooglegraph" style="height:300px;"></div>
+  </div>
+
+  <table border="0"><tr>
+  <td style="vertical-align:top; padding-right:2px;">
+  <iframe src="https://wp.realraum.at"></iframe>
+  </td><td style="vertical-align:top;">
+   <!-- Google Plus Wall ------------------------ -->
+   <div class="gpluswall">
+    <p class="topic">Google+</p>
+    <div id="gplusevents">Lädt ...</div>
+   </div>
+  </td></tr>
+  </table>
+</body>
+</html>
