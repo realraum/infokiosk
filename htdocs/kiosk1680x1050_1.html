@@ -6,18 +6,39 @@
   <script type="text/javascript" src="/js/jquery/jquery.min.js"></script>
   <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script-->
    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  <script type="text/javascript" src="vis.js"></script>
   <script type="text/javascript" src="kiosk.js"></script>
+  <link rel="stylesheet" href="vis.css" type="text/css" />
  </head>
  <body style="max-width:1680px; max-height:1050px;">
-  <div id="dateclock"></div>
-  <div id="siteheader">Neuigkeiten auf <span style="font-size:110%;">http://realraum.at</span></div>
-  <div id="headerphoto" class="headerphoto">
-  <img class="headerphoto" src="http://realraum.at/wiki/lib/exe/fetch.php?media=xro:realraum_hdr.jpg"></img>
+ <!-- Sensor Data ------------------------ -->
+
+ <table border="0" cellpadding="0" cellspacing="0"><tr>
+  <td style="vertical-align:top; padding-right:2px;">
+<div class="sensorgraphs">
+    <p class="topic">Sensordaten</p>
+    <div class="sensorelem">
+    <table class="status" style="">
+    <tr><td id="anwesenheit_status_kiosk" style="height:100px; border:0px none black;">Lädt ...</td></tr>
+    <tr><td id="sensor_status" style="border:0px none black; margin-top:5px;">Lädt ...</td></tr>
+    </table>
+    </div>
+  <div id="vistemperature" style="width:390px; height:400px;">
   </div>
-  <!-- Calendar ------------------------ -->
-  <div class="calendar">
-    <p class="topic">Veranstaltungskalender</p>
-    <div id="grical_upcoming_kiosk">Kalendar lädt ...</div>
   </div>
+</td><td>
+    <div class="twitterwall" style="margin-left:1ex; margin-right:1ex;">
+      <p class="topic">Tweets</p>
+                  <a class="twitter-timeline" data-dnt="true" href="https://twitter.com/realraum" data-widget-id="611591733323956225">Tweets von @realraum </a>
+                  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    </div>
+</td><td style="vertical-align:top;">
+   <!-- Google Plus Wall ------------------------ -->
+   <div class="gpluswall">
+    <p class="topic">Google+</p>
+    <div id="gplusevents">Lädt ...</div>
+   </div>
+  </td></tr>
+  </table>
 </body>
 </html>

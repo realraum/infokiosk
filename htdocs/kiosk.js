@@ -215,17 +215,6 @@ function drawLineGraph(targetelem, dataarray, options, x_is_epochdate) {
   }
 }
 
-function loadAndDrawSensorData() {
-  $r3jq.getJSON("https://realraum.at/shmcache/r3sensors.json", function(data){
-    drawLineGraph(document.getElementById('tempgooglegraph'), data["TempSensorUpdate"],
-      {curveType: "function", title: 'Temperature Sensors', colors: ['#FF0000','#CC0033','#660000','#CC3333'], vAxis:{viewWindow:{min:15,max:26}, viewWindowMode:"explicit"}, chartArea:{left:32,top:20,width:"88%",height:"78%"}, legend: {position: "none"}} ,true);
-    drawLineGraph(document.getElementById('lightgooglegraph'), data["IlluminationSensorUpdate"],
-        {curveType: "none", title: 'Illumination Sensors', vAxis: {maxValue: 1024, minValue:5}, chartArea:{left:32,top:20,width:"88%",height:"78%"}, legend: {position: "none"}} ,true);
-    drawLineGraph(document.getElementById('movementgooglegraph'), data["MovementSensorUpdate"],
-        {curveType: "function", title: 'Movement Sensors', vAxis: {maxValue: 10, minValue:0,viewWindowMode:"maximized"}, chartArea:{left:32,top:20,width:"88%",height:"78%"}, legend: {position: "none"}} ,true);
-    });
-}
-
 function siNumberString(num,unit)
 {
   var siid=""
@@ -310,6 +299,9 @@ function writeAnwesenheitStatus(data)
       sensorsdiv+='<div class="sensorstatus"><b><u>Temperatur</u></b>';
       $r3jq.each( data.sensors.temperature, function(s, sensorobj) {
         sensorsdiv+='<br/>'+sensorobj.location+': '+sensorobj.value.toFixed(2)+sensorobj.unit;
+	if (temperature_graph2d) {
+		addVisDatapoint(temperature_graph2d, temperature_dataset, {x: sensorobj.timestamp, y:sensorobj.value, group:s});
+	}
         drawGauge($r3jq('.tempgauge[sensorlocation=\''+sensorobj.location+'\']').get()[0], "Temp "+sensorobj.location, sensorobj.value, {redFrom: 33, redTo: 40, yellowFrom:29, yellowTo: 33,  minorTicks: 4, min:0, max:40});
       });
       sensorsdiv+='</div>';
@@ -486,6 +478,27 @@ function reloadImg(element)
     element.src = img_orig_src[element.id] + "?dt="+Math.floor(new Date().getTime() / 1000).toString();
 }
 
+function addVisDatapoint(graph, dataset, data)
+{
+    var now = vis.moment();
+    dataset.add(data);
+    // remove all data points which are no longer visible
+    var range = graph.getWindow();
+    var interval = range.end - range.start;
+    var oldIds = dataset.getIds({
+      filter: function (item) {
+        return item.x < range.start - interval;
+      }
+    });
+    dataset.remove(oldIds);
+    console.log(dataset);
+
+    graph.setWindow(now - interval, now, {animation: false});
+}
+
+var temperature_graph2d = false;
+var temperature_dataset = false;
+
 $r3jq(document).ready(function()
 {
   updateAnwesenheitStatus();
@@ -505,14 +518,34 @@ $r3jq(document).ready(function()
     loadCalendarMainPage();
     setInterval("loadCalendarMainPage()", 123*1000);
   }
-  if (document.getElementById("tempgooglegraph") || document.getElementById("lightgooglegraph") || document.getElementById("movementgooglegraph"))
-  {
-    loadAndDrawSensorData();
-    setInterval("loadAndDrawSensorData()",145*1000);
-  }
   if (document.getElementById("gplusevents"))
   {
     loadGooglePlusEvents();
     setInterval("loadGooglePlusEvents()", 1207*1000);
+  }
+  if (document.getElementById("vistemperature"))
+  {
+// create a graph2d with an (currently empty) dataset
+  var container = document.getElementById("vistemperature");
+  temperature_dataset = new vis.DataSet();
+
+  var options = {
+    start: vis.moment().add(-30, 'seconds'), // changed so its faster
+    end: vis.moment(),
+    dataAxis: {
+      left: {
+        range: {
+          min:-10, max: 10
+        }
+      }
+    },
+    drawPoints: {
+      style: 'circle' // square, circle
+    },
+    shaded: {
+      orientation: 'bottom' // top, bottom
+    }
+  };
+  temperature_graph2d = new vis.Graph2d(container, temperature_dataset, options);
   }
 });
