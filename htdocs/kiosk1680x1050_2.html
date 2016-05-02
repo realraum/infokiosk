@@ -10,7 +10,10 @@
  </head>
  <body style="max-width:900px; max-height:1440px;">
  <!-- Sensor Data ------------------------ -->
-  <div class="sensorgraphs">
+
+ <table border="0" cellpadding="0" cellspacing="0"><tr>
+  <td style="vertical-align:top; padding-right:2px;">
+<div class="sensorgraphs">
     <p class="topic">Sensordaten</p>
     <div class="sensorelem">
     <table class="status" style="">
@@ -22,11 +25,13 @@
     <div class="sensorelem" id="lightgooglegraph" style="height:300px;"></div>
   <div class="sensorelem" id="movementgooglegraph" style="height:300px;"></div>
   </div>
-
-  <table border="0"><tr>
-  <td style="vertical-align:top; padding-right:2px;">
-  <iframe src="https://wp.realraum.at"></iframe>
-  </td><td style="vertical-align:top;">
+</td><td>
+    <div class="twitterwall" style="margin:1ex; margin-top:-80px;">
+      <p class="topic">Tweets</p>
+                  <a class="twitter-timeline" data-dnt="true" href="https://twitter.com/realraum" data-widget-id="611591733323956225">Tweets von @realraum </a>
+                  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    </div>
+</td><td style="vertical-align:top;">
    <!-- Google Plus Wall ------------------------ -->
    <div class="gpluswall">
     <p class="topic">Google+</p>
