@@ -1,0 +1,11 @@
+[Unit]
+Description=Restart slideshow
+ConditionPathIsDirectory=/home/pi/Pictures
+After=slideshow.service
+
+[Path]
+PathChanged=/home/pi/Pictures
+Unit=slideshowrestart.service
+
+[Install]
+WantedBy=default.target
