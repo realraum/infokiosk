@@ -548,4 +548,23 @@ $r3jq(document).ready(function()
   };
   temperature_graph2d = new vis.Graph2d(container, temperature_dataset, options);
   }
+  if (document.getElementById("dw__tagline"))
+  {
+	var additional_subtitles=new Array("Hackspace in Graz","Makerspace in Graz","DIYBioLab in Graz");
+	var additional_subtitle_interval=4200;
+	//var the_subtitle_element=$r3jq("h2.site-description");
+	var the_subtitle_element=$r3jq("#dw__tagline");
+
+	var subdv = $r3jq('<div style="position:relative;">');
+	$r3jq("<span/>").addClass("sitesubdescr").css("position","absolute").text(the_subtitle_element.text()).appendTo(subdv);
+	$r3jq.each(additional_subtitles, function(i,t){ $r3jq("<span/>").addClass("sitesubdescr").css("position","absolute").hide().text(t).appendTo(subdv); })
+	the_subtitle_element.text("").append(subdv);
+
+	var ssdidx=0;
+	setInterval(function () {
+	    $r3jq(document.getElementsByClassName("sitesubdescr")[ssdidx]).fadeOut(600);
+	    ssdidx=(ssdidx+1) % document.getElementsByClassName("sitesubdescr").length;
+	    $r3jq(document.getElementsByClassName("sitesubdescr")[ssdidx]).css("display","inline").fadeIn(600);
+	}, additional_subtitle_interval);
+}
 });
