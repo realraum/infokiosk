@@ -550,7 +550,7 @@ $r3jq(document).ready(function()
   }
   if (document.getElementById("dw__tagline"))
   {
-	var additional_subtitles=new Array("Hackspace in Graz","Makerspace in Graz","DIYBioLab in Graz");
+	var additional_subtitles=new Array("Hackspace in Graz","Makerspace in Graz","DIYBioLab in Graz","Chaostreff in Graz");
 	var additional_subtitle_interval=4200;
 	//var the_subtitle_element=$r3jq("h2.site-description");
 	var the_subtitle_element=$r3jq("#dw__tagline");
