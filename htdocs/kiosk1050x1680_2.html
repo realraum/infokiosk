@@ -7,8 +7,24 @@
   <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script-->
    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
   <script type="text/javascript" src="kiosk.js"></script>
+<script>window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));</script>
  </head>
- <body style="max-height:1680px; max-width:1050px;">
+ <body style="max-height:1680px; max-width:1050px; font-size:21px;">
   <div style="width:100%;">
     <div style="margin:0; padding:5px; width:620px; float:left;">
      <div id="dateclock"></div>
@@ -20,7 +36,7 @@
    </div>
   </div>
   <div style="width:100%;">
-    <div style="margin:0; padding:5px; width:850px; float:left;">
+    <div style="margin:0; padding:5px; width:848px; float:left;">
 	  <!-- Calendar ------------------------ -->
 	  <div class="calendar" style="height:422px;">
 	    <p class="topic">Veranstaltungskalender</p>
@@ -39,9 +55,10 @@
   <!-- Twitter ------------------------- -->
   <div class="twitterwall" style="margin-left:1ex; margin-right:1ex; float:left;">
       <p class="topic">Tweets</p>
+      <div style="">
                   <a class="twitter-timeline" data-dnt="true" href="https://twitter.com/realraum" data-widget-id="611591733323956225">Tweets von @realraum </a>
-                  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
     </div>
+  </div>
    <!-- Google Plus Wall ------------------------ -->
    <div class="gpluswall" style="float:right;">
     <p class="topic">Google+</p>
