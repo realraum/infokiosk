@@ -1,0 +1,44 @@
+# interfaces(5) file used by ifup(8) and ifdown(8)
+
+# Please note that this file is written to be used with dhcpcd
+# For static IP, consult /etc/dhcpcd.conf and 'man dhcpcd.conf'
+
+# Include files from /etc/network/interfaces.d:
+source-directory /etc/network/interfaces.d
+
+auto lo
+iface lo inet loopback
+
+allow-hotplug usb0
+allow-hotplug usb1
+allow-hotplug usb2
+allow-hotplug usb3
+auto br0
+
+iface eth0 inet static
+iface usb0 inet manual
+  up ip link set usb0 up
+  up brctl addif br0 usb0; return 0
+iface usb1 inet manual
+  up ip link set usb1 up
+  up brctl addif br0 usb1; return 0
+iface usb2 inet manual
+  up ip link set usb2 up
+  up brctl addif br0 usb2; return 0
+
+iface br0 inet static
+  bridge_ports eth0 usb0 usb1 usb2 usb3
+  address 192.168.127.239
+  netmask 24
+  gateway 192.168.127.254
+  dns-nameserver 192.168.127.254
+  post-up resolvconf -a br0 <<< "nameserver 192.168.127.254"
+
+
+#allow-hotplug wlan0
+#iface wlan0 inet manual
+#    wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
+
+#allow-hotplug wlan1
+#iface wlan1 inet manual
+#    wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf

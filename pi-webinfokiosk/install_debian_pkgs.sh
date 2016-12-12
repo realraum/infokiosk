@@ -1,8 +1,11 @@
 #!/bin/bash
+sudo mount / -o remount,rw
 sudo loginctl enable-linger pi
-systemd --user enable startx.service
-systemd --user enable restartx.timer
-sudo apt-get install spectrwm unclutter epiphany-browser zsh
+sudo apt-get update
+sudo apt-get install --no-install-recommends spectrwm unclutter epiphany-browser zsh tmux vim libpam-dbus libpam-systemd
+systemctl --user enable startx.service
+systemctl --user enable restartx.timer
 systemctl --user start restartx.timer startx.service
 chsh -s /bin/zsh pi
+sudo mount / -o remount,ro
 
