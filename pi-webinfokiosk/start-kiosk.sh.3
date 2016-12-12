@@ -23,7 +23,8 @@ RESOLUTION=$(xrandr -q | awk -F'current' -F',' 'NR==1 {gsub("( |current)","");pr
 KIOSKURI=$(eval echo -n \${KIOSKURI_${RESOLUTION}:-$KIOSKURI_DEFAULT})
 spectrwm &
 unclutter &
-epiphany --profile ~/.config/epiphany -a "$KIOSKURI"
+mkdir -p /run/user/1000/epiphany
+epiphany --profile /run/user/1000/epiphany  -a "$KIOSKURI"
 #midori -e Fullscreen -a "$KIOSKURI"
 #chromium --kiosk --incognito "$KIOSKURI"
 exit 0

@@ -3,8 +3,8 @@ KIOSKURI_DEFAULT="http://www.realraum.at/kiosk900x1440.html"
 KIOSKURI_900x1440="http://www.realraum.at/kiosk900x1440.html"
 KIOSKURI_768x1366="http://www.realraum.at/kiosk768x1366.html"
 KIOSKURI_1024x768="http://www.realraum.at/kiosk1024x768.html"
-#KIOSKURI_900x1440="http://www.realraum.at/kiosk.html"
-#KIOSKURI_1024x768="http://www.realraum.at/kiosk2cal.html"
+KIOSKURI_1680x1050="http://www.realraum.at/kiosk1680x1050_2.html"
+KIOSKURI_1050x1680="http://www.realraum.at/kiosk1050x1680_2.html"
 #KIOSKURI="http://grical.realraum.at"
 sleep 1
 
@@ -32,8 +32,8 @@ unclutter &
 spectrwm &
 # first try epiphany (which as great touchscreen support) then midori and finally chromium
 if [[ -x "$(which epiphany)" ]; then
-    [[ -d ~/.config/epiphany ]] || mkdir -p ~/.config/epiphany
-    epiphany --profile ~/.config/epiphany -a "$KIOSKURI"
+    mkdir -p /run/user/1000/epiphany
+    epiphany --profile /run/user/1000/epiphany  -a "$KIOSKURI"
 elif [[ -x "$(which midori)" ]; then 
     midori -e Fullscreen -a "$KIOSKURI"
 elif [[ -x "$(which chromium)" ]; then
