@@ -8,4 +8,4 @@ systemctl --user enable restartx.timer
 systemctl --user start restartx.timer startx.service
 chsh -s /bin/zsh pi
 sudo mount / -o remount,ro
-
+sudo reboot
