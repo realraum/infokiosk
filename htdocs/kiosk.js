@@ -371,7 +371,10 @@ function writeAnwesenheitStatus(data)
     if (sensorsdiv != "")
     {
       sensorshtml='<div style="width:100%; display:inline-block;">'+sensorsdiv;
-      document.getElementById('sensor_status').innerHTML=sensorshtml;
+      var sensorstatuselem = document.getElementById('sensor_status');
+      if (sensorstatuselem) {
+       sensorstatuselem.innerHTML=sensorshtml;
+      }
     }
   }
 }
