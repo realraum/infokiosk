@@ -232,19 +232,19 @@ function writeAnwesenheitStatus(data)
   var html="";
   var sensorshtml="";
   var sensorsdiv="";
-  if (data.open)
+  if (data.state.open)
   {
-   iconuri=data.icon.open;
+   iconuri=data.state.icon.open;
    statuscolor="lime";
   }
   else
   {
-   iconuri=data.icon.closed;
+   iconuri=data.state.icon.closed;
    statuscolor="red";
   }
   var anwesenheit_status_kiosk = document.getElementById('anwesenheit_status_kiosk');
   var anwesenheit_status_frontpage = document.getElementById('anwesenheit_status');
-  var statusage = parseInt((new Date()).getTime()/1000) - data.lastchange;
+  var statusage = parseInt((new Date()).getTime()/1000) - data.state.lastchange;
   var statusagestatus = "";
   if (statusage > 600)
   {
@@ -253,13 +253,13 @@ function writeAnwesenheitStatus(data)
   }
   if (anwesenheit_status_kiosk)
   {
-    anwesenheit_status_kiosk.innerHTML='<table border="0" cellpadding="0" cellspacing="0" width="100%" height="100"><tr><td style="width:100px;"><img style="float:left;" src="'+iconuri+'" height="100" width="100"/></td><td style="width:4px;"></td><td class="anwesenheitsstatus" style="background-color:'+statuscolor+'; ">'+data.status+'</td></tr></table>';
+    anwesenheit_status_kiosk.innerHTML='<table border="0" cellpadding="0" cellspacing="0" width="100%" height="100"><tr><td style="width:100px;"><img style="float:left;" src="'+iconuri+'" height="100" width="100"/></td><td style="width:4px;"></td><td class="anwesenheitsstatus" style="background-color:'+statuscolor+'; ">'+data.state.message+'</td></tr></table>';
   }
   if (anwesenheit_status_frontpage)
   {
     //anwesenheit_status_frontpage.innerHTML='<table border="0" cellpadding="0" cellspacing="0" width="100%" height="42"><tr><td style="width:42px;"><img style="float:left;" src="'+iconuri+'" height="42" width="42"/></td><td style="width:4px;"></td><td style="background-color:'+statuscolor+'; height:42px; text-align:center; margin-left:48px; margin-right:auto; font-size:larger; font-weight:bold; vertical-align:middle; display:table-cell;">'+data.status+'</td></tr>'+statusagestatus+'</table>';
     //anwesenheit_status_frontpage.innerHTML='<table border="0" cellpadding="0" cellspacing="0" style="padding:0; margin:0: height:42px; width:100%;"><tr><td style="width:42px;"><img style="float:left;" src="'+iconuri+'" height="42" width="42"/></td><td style="width:4px;"></td><td style="background-color:'+statuscolor+'; height:42px; text-align:center; margin-left:48px; margin-right:auto; font-size:larger; font-weight:bold; vertical-align:middle; display:table-cell;">'+data.status+statusagestatus+'</td></tr></table>';
-    anwesenheit_status_frontpage.innerHTML='<div style="height:42px; width:100%;"><img style="float:left;" src="'+iconuri+'" height="42" width="42"/><div style="background-color:'+statuscolor+'; height:42px; line-height: 42px; text-align:center; vertical-align: middle; margin-left:48px; margin-right:auto; font-size:larger; font-weight:bold;">'+data.status+statusagestatus+'</div></div>';
+    anwesenheit_status_frontpage.innerHTML='<div style="height:42px; width:100%;"><img style="float:left;" src="'+iconuri+'" height="42" width="42"/><div style="background-color:'+statuscolor+'; height:42px; line-height: 42px; text-align:center; vertical-align: middle; margin-left:48px; margin-right:auto; font-size:larger; font-weight:bold;">'+data.state.message+statusagestatus+'</div></div>';
   }
 
   var evtstatuselem = document.getElementById('event_status');
