@@ -274,6 +274,7 @@ function writeAnwesenheitStatus(data)
 
   if (data.sensors)
   {
+    sensorsdiv+='<div class="sensorstatus"><b><u>Last Update</u></b><br/>'+statusage+'s ago</div>';
     if (data.sensors.door_locked)
     {
       sensorsdiv+='<div class="sensorstatus"><b><u>Eingangstür</u></b>';
