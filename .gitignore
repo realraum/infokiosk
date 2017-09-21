@@ -1,0 +1,6 @@
+*~
+*.bak
+pi-images/rootfs-kiosk1/home/pi/Pictures/
+pi-images/rootfs-kiosk1/home/pi/datenradio2/
+pi-images/*.img
+pi-images/*.zip

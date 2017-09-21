@@ -1,0 +1,13 @@
+[Unit]
+Description=startx as user
+Wants=network.target
+
+[Service]
+Nice=10
+Type=simple
+Restart=always
+ExecStart=/usr/bin/xinit /usr/local/bin/start-kiosk.sh
+SyslogIdentifier=%i
+
+[Install]
+WantedBy=default.target

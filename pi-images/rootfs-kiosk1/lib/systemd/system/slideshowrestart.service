@@ -1,0 +1,8 @@
+[Unit]
+Description=Restart slideshow
+ConditionPathIsDirectory=/home/pi/Pictures
+After=slideshow.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/systemctl restart slideshow.service

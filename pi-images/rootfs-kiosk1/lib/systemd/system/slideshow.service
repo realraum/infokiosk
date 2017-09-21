@@ -1,0 +1,12 @@
+[Unit]
+Description=Display slideshow
+Wants=network.target
+
+[Service]
+Nice=10
+Type=forking
+Restart=always
+ExecStart=/home/pi/bin/slideshow.sh
+
+[Install]
+WantedBy=default.target

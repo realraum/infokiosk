@@ -1,0 +1,18 @@
+[Unit]
+Description=Datenradio Bluetooth Info-Schicker
+ConditionPathExists=/home/pi/datenradio2
+Requires=bluetooth.service
+After=bluetooth.service
+
+[Service]
+Nice=19
+Type=simple
+Restart=always
+WorkingDirectory=/home/pi/datenradio2/
+ExecStartPre=/bin/hciconfig hci0 name "ZeigDichSichtbarAlsDatenradio"
+ExecStartPre=/bin/hciconfig hci0 piscan
+ExecStart=/usr/local/bin/datenradio2 --timeo 20 --sleep 20 datenradio /home/pi/datenradio2/datenradio2.jpg /home/pi/datenradio2/datenradio2.gpx /home/pi/datenradio2/datenradio2.sent
+SyslogIdentifier=datenradio
+
+[Install]
+WantedBy=bluetooth.target
