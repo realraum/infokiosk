@@ -307,12 +307,20 @@ function writeAnwesenheitStatus(data)
       });
       sensorsdiv+='</div>';
     }
+    if (data.sensors.barometer)
+    {
+      sensorsdiv+='<div class="sensorstatus"><b><u>Barometer</u></b>';
+      $r3jq.each( data.sensors.temperature, function(s, sensorobj) {
+        sensorsdiv+='<br/>'+sensorobj.location+': '+sensorobj.value.toFixed(2)+sensorobj.unit;
+        drawGauge($r3jq('.barometergauge[sensorlocation=\''+sensorobj.location+'\']').get()[0], "Barometer "+sensorobj.location, sensorobj.value, {redFrom: 950, redTo: 1024,yellowFrom:0, yellowTo: 200,minorTicks: 4, min:0, max:1024});
+      sensorsdiv+='</div>';
+    }
     if (data.sensors.ext_illumination)
     {
       sensorsdiv+='<div class="sensorstatus"><b><u>Licht</u></b>';
       $r3jq.each( data.sensors.ext_illumination, function(s, sensorobj) {
         sensorsdiv+='<br/>'+sensorobj.location+': '+sensorobj.value;
-        drawGauge($r3jq('.lightgauge[sensorlocation=\''+sensorobj.location+'\']').get()[0], "Temp "+sensorobj.location, sensorobj.value, {redFrom: 950, redTo: 1024,yellowFrom:0, yellowTo: 200,minorTicks: 4, min:0, max:1024});
+        drawGauge($r3jq('.lightgauge[sensorlocation=\''+sensorobj.location+'\']').get()[0], "Light "+sensorobj.location, sensorobj.value, {redFrom: 950, redTo: 1024,yellowFrom:0, yellowTo: 200,minorTicks: 4, min:0, max:1024});
       });
       sensorsdiv+='</div>';
     }
