@@ -300,9 +300,9 @@ function writeAnwesenheitStatus(data)
       sensorsdiv+='<div class="sensorstatus"><b><u>Temperatur</u></b>';
       $r3jq.each( data.sensors.temperature, function(s, sensorobj) {
         sensorsdiv+='<br/>'+sensorobj.location+': '+sensorobj.value.toFixed(2)+sensorobj.unit;
-	if (temperature_graph2d) {
-		addVisDatapoint(temperature_graph2d, temperature_dataset, {x: sensorobj.timestamp, y:sensorobj.value, group:s});
-	}
+	       if (temperature_graph2d) {
+		      addVisDatapoint(temperature_graph2d, temperature_dataset, {x: sensorobj.timestamp, y:sensorobj.value, group:s});
+	       }
         drawGauge($r3jq('.tempgauge[sensorlocation=\''+sensorobj.location+'\']').get()[0], "Temp "+sensorobj.location, sensorobj.value, {redFrom: 33, redTo: 40, yellowFrom:29, yellowTo: 33,  minorTicks: 4, min:0, max:40});
       });
       sensorsdiv+='</div>';
@@ -313,6 +313,7 @@ function writeAnwesenheitStatus(data)
       $r3jq.each( data.sensors.temperature, function(s, sensorobj) {
         sensorsdiv+='<br/>'+sensorobj.location+': '+sensorobj.value.toFixed(2)+sensorobj.unit;
         drawGauge($r3jq('.barometergauge[sensorlocation=\''+sensorobj.location+'\']').get()[0], "Barometer "+sensorobj.location, sensorobj.value, {redFrom: 950, redTo: 1024,yellowFrom:0, yellowTo: 200,minorTicks: 4, min:0, max:1024});
+      });
       sensorsdiv+='</div>';
     }
     if (data.sensors.ext_illumination)
