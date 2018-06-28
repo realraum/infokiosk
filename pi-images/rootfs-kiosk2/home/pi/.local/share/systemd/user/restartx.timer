@@ -9,7 +9,8 @@
 Description=Daily Restart of X
 
 [Timer]
-OnUnitActiveSec=12h
+OnStartupSec=24h
+OnUnitActiveSec=24h
 
 [Install]
 WantedBy=default.target
