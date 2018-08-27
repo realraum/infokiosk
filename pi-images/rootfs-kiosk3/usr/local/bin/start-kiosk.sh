@@ -31,8 +31,12 @@ mkdir -p /run/user/1000/browsercache
 cat > /run/user/1000/browser/Preferences <<EOF
 {"first_run": false,"translate":{"enabled":false},"translate_blocked_languages":["de","en"]}
 EOF
+cat > /run/user/1000/browser/master_preferences <<EOF
+{"distribution":{"suppress_first_run_bubble":true}}
+EOF
 chmod 600 /run/user/1000/browser/Preferences
+chmod 600 /run/user/1000/browser/master_preferences
 export LANG=de_AT.UTF-8
-chromium-browser --kiosk --incognito --disable-translate --disable-translate-new-ux --disable-glsl-translator --no-message-box --disable-domui-menu --disable-infobars --disable-suggestions-service --disable-save-password-bubble --disk-cache-dir=/run/user/1000/browsercache --user-data-dir=/run/user/1000/browser --start-maximized --disable-plugins --no-first-run --disable-extensions   "$KIOSKURI"
+chromium-browser --kiosk --no-first-run --incognito --disable-translate --disable-translate-new-ux --disable-glsl-translator --no-message-box --disable-domui-menu --disable-infobars --disable-suggestions-service --disable-save-password-bubble --disk-cache-dir=/run/user/1000/browsercache --user-data-dir=/run/user/1000/browser --start-maximized --disable-plugins  --disable-extensions   "$KIOSKURI"
 exit 0
 

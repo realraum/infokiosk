@@ -108,6 +108,7 @@ sudo cp ~/.zshrc ~/.zshrc.local ${MOUNTPTH}/root/
 
 ## Hostname
 echo "$BBHOSTNAME" | sudo tee ${MOUNTPTH}/etc/hostname
+sudo sed -i "s/raspberrypi/$BBHOSTNAME/" ${MOUNTPTH}/etc/hosts
 
 ## ssh keys
 sudo mkdir -p ${MOUNTPTH}/root/.ssh ${MOUNTPTH}/home/pi/.ssh
