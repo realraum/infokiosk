@@ -101,6 +101,9 @@ runchroot /bin/bash < $APTSCRIPT
 ## settings and stuff
 sudo rsync -var ${LOCALROOT}/  ${MOUNTPTH}/
 
+## gen locales
+runchroot /usr/sbin/locale-gen
+
 ## newest zsh config
 cp ~/.zshrc ~/.zshrc.local ${MOUNTPTH}/home/pi/
 chown 1000:1000 ${MOUNTPTH}/home/pi/.zsh*
