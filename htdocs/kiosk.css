@@ -224,6 +224,19 @@ div.twitterwall{
   padding-bottom:1em;
 }
 
+div.mastodonwall {
+  width: 626px;
+  padding-bottom:1em;
+}
+
+iframe.mastodonevents {
+  display:block;
+  width: 626px;
+  margin-left:0;
+  margin-right:0;
+  margin-top:0;
+}
+
 div.gpluspost {
   display:block;
   width: 495px;
