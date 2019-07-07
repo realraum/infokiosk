@@ -392,13 +392,7 @@ function writeAnwesenheitStatus(data)
 
 function updateAnwesenheitStatus()
 {
- //var req = new XMLHttpRequest();
- //url = "/status.json";
- url = "//realraum.at/status.json";
- //req.open("GET", url ,false);
- //google chrome workaround
- //req.setRequestHeader("googlechromefix","");
- //req.send(null);
+ url = "//status.realraum.at/spaceapi.json";
  var jqxhr = $r3jq.getJSON(url, writeAnwesenheitStatus);
 }
 
