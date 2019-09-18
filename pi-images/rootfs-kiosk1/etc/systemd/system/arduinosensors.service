@@ -2,6 +2,7 @@
 Description=Arduino Sensors Bridge
 
 [Service]
+User=pi
 Nice=19
 Type=simple
 Restart=always
