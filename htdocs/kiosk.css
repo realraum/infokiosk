@@ -169,7 +169,7 @@ p.anwesenheit_status {
 }
 
 td.anwesenheitsstatus {
-  height:100px;
+  height:85px;
   text-align:center;
   margin-left:105px;
   margin-right:auto;
@@ -177,6 +177,17 @@ td.anwesenheitsstatus {
   display:table-cell;
   font-weight:bold;
   font-size:136%;
+}
+
+td.subspaceanwesenheitsstatus {
+  height:10px;
+  text-align:center;
+  margin-left:105px;
+  margin-right:auto;
+  vertical-align:middle;
+  display:table-cell;
+  font-size:50%;
+  border-top: 1px solid black;
 }
 
 td.sensorstatus {

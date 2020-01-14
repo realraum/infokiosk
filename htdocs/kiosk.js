@@ -1,5 +1,10 @@
 var $r3jq = jQuery.noConflict();
 
+var r3colorstatus_open="lime";
+var r3colorstatus_barelyopen="olive";
+var r3colorstatus_closed="red";
+var r3colorstatus_unknown="gray";
+
 function min(a,b)
 {
     if (a > b)
@@ -81,16 +86,6 @@ function writeGooglePlusEvents(data, elem)
   elem.innerHTML=ghtml;
 }
 
-
-function loadGooglePlusEvents()
-{
-  var gpak = "AIzaSyD9xBFM-KWwSYBgZ8VzftJ5wYYvurOxEHg";
-  var gplusuri = "https://www.googleapis.com/plus/v1/people/113737596421797426873/activities/public?maxResults=4&key="+gpak;
-  var gpluscontainer=document.getElementById("gplusevents");
-  $r3jq.getJSON(gplusuri, function(data){
-    writeGooglePlusEvents(data, gpluscontainer);
-  });
-}
 
 function weekday2str(dow)
 {
@@ -233,36 +228,15 @@ function writeAnwesenheitStatus(data)
   var html="";
   var sensorshtml="";
   var sensorsdiv="";
-  if (data.state.open)
-  {
-   iconuri=data.state.icon.open;
-   statuscolor="lime";
-  }
-  else
-  {
-   iconuri=data.state.icon.closed;
-   statuscolor="red";
-  }
+  var space1empty=undefined;
+  var space2empty=undefined;
+
   var anwesenheit_status_kiosk = document.getElementById('anwesenheit_status_kiosk');
   var anwesenheit_status_frontpage = document.getElementById('anwesenheit_status');
   var statusage = parseInt((new Date()).getTime()/1000) - data.state.lastchange;
   var statusagestatus = "";
-  if (statusage > 600)
-  {
-    //var statusagestatus = '<tr style="height:5px; overflow:hidden; "><td colspan="2"></td><td style="text-align:right; font-size:5%; background:red;">Status older than ' + siNumberString(statusage,"s") + '</td></tr>';
-    var statusagestatus = '<br/><div style="text-align:right; float:right; margin:0; padding:1px; line-height:105%; font-size:65%; background:red;">Status older than ' + siNumberString(statusage,"s") + '</div>';
-  }
-  if (anwesenheit_status_kiosk)
-  {
-    anwesenheit_status_kiosk.innerHTML='<table border="0" cellpadding="0" cellspacing="0" width="100%" height="100"><tr><td style="width:100px;"><img style="float:left;" src="'+iconuri+'" height="100" width="100"/></td><td style="width:4px;"></td><td class="anwesenheitsstatus" style="background-color:'+statuscolor+'; ">'+data.state.message+'</td></tr></table>';
-  }
-  if (anwesenheit_status_frontpage)
-  {
-    //anwesenheit_status_frontpage.innerHTML='<table border="0" cellpadding="0" cellspacing="0" width="100%" height="42"><tr><td style="width:42px;"><img style="float:left;" src="'+iconuri+'" height="42" width="42"/></td><td style="width:4px;"></td><td style="background-color:'+statuscolor+'; height:42px; text-align:center; margin-left:48px; margin-right:auto; font-size:larger; font-weight:bold; vertical-align:middle; display:table-cell;">'+data.status+'</td></tr>'+statusagestatus+'</table>';
-    //anwesenheit_status_frontpage.innerHTML='<table border="0" cellpadding="0" cellspacing="0" style="padding:0; margin:0: height:42px; width:100%;"><tr><td style="width:42px;"><img style="float:left;" src="'+iconuri+'" height="42" width="42"/></td><td style="width:4px;"></td><td style="background-color:'+statuscolor+'; height:42px; text-align:center; margin-left:48px; margin-right:auto; font-size:larger; font-weight:bold; vertical-align:middle; display:table-cell;">'+data.status+statusagestatus+'</td></tr></table>';
-    anwesenheit_status_frontpage.innerHTML='<div style="height:42px; width:100%;"><img style="float:left;" src="'+iconuri+'" height="42" width="42"/><div style="background-color:'+statuscolor+'; height:42px; line-height: 42px; text-align:center; vertical-align: middle; margin-left:48px; margin-right:auto; font-size:larger; font-weight:bold;">'+data.state.message+statusagestatus+'</div></div>';
-  }
 
+  ////////////////  Events Spaceapi
   var evtstatuselem = document.getElementById('event_status');
   if (evtstatuselem) {
     if (data.events)
@@ -273,16 +247,16 @@ function writeAnwesenheitStatus(data)
     }
   }
 
+  /////////////////  Sensors SpaceApi
   if (data.sensors)
   {
     sensorsdiv+='<div class="sensorstatus"><b><u>Last Update</u></b><br/>'+statusage+'s ago</div>';
-    if (data.sensors.door_locked)
+    if (data.sensors.ext_illumination)
     {
-      sensorsdiv+='<div class="sensorstatus"><b><u>Eingangstür</u></b>';
-      $r3jq.each( data.sensors.door_locked, function(s, sensorobj)  {
-        var lockstatus="Auf";
-        if (sensorobj.value) { lockstatus = "Zu"; }
-        sensorsdiv+='<br/>'+sensorobj.location+': '+lockstatus;
+      sensorsdiv+='<div class="sensorstatus"><b><u>Licht</u></b>';
+      $r3jq.each( data.sensors.ext_illumination, function(s, sensorobj) {
+        sensorsdiv+='<br/>'+sensorobj.location+': '+sensorobj.value;
+        drawGauge($r3jq('.lightgauge[sensorlocation=\''+sensorobj.location+'\']').get()[0], "Light "+sensorobj.location, sensorobj.value, {redFrom: 950, redTo: 1024,yellowFrom:0, yellowTo: 200,minorTicks: 4, min:0, max:1024});
       });
       sensorsdiv+='</div>';
     }
@@ -290,6 +264,22 @@ function writeAnwesenheitStatus(data)
     {
       sensorsdiv+='<div class="sensorstatus"><b><u>Türkontakt</u></b>';
       $r3jq.each( data.sensors.ext_door_ajar, function(s, sensorobj)  {
+        var lockstatus="Auf";
+        if (sensorobj.value) { lockstatus = "Zu"; }
+        sensorsdiv+='<br/>'+sensorobj.location+': '+lockstatus;
+      });
+      sensorsdiv+='</div>';
+    }
+    if (data.sensors.door_locked)
+    {
+      sensorsdiv+='<div class="sensorstatus"><b><u>Türschloß</u></b>';
+      $r3jq.each( data.sensors.door_locked, function(s, sensorobj)  {
+        if (sensorobj.name == "Space1Empty") {
+          space1empty = sensorobj.value;
+        }
+        if (sensorobj.name == "Space2Empty") {
+          space2empty = sensorobj.value;
+        }
         var lockstatus="Auf";
         if (sensorobj.value) { lockstatus = "Zu"; }
         sensorsdiv+='<br/>'+sensorobj.location+': '+lockstatus;
@@ -314,15 +304,6 @@ function writeAnwesenheitStatus(data)
       $r3jq.each( data.sensors.barometer, function(s, sensorobj) {
         sensorsdiv+='<br/>'+sensorobj.location+': '+sensorobj.value.toFixed(2)+sensorobj.unit;
         drawGauge($r3jq('.barometergauge[sensorlocation=\''+sensorobj.location+'\']').get()[0], "Barometer "+sensorobj.location, sensorobj.value, {redFrom: 950, redTo: 1024,yellowFrom:0, yellowTo: 200,minorTicks: 4, min:0, max:1024});
-      });
-      sensorsdiv+='</div>';
-    }
-    if (data.sensors.ext_illumination)
-    {
-      sensorsdiv+='<div class="sensorstatus"><b><u>Licht</u></b>';
-      $r3jq.each( data.sensors.ext_illumination, function(s, sensorobj) {
-        sensorsdiv+='<br/>'+sensorobj.location+': '+sensorobj.value;
-        drawGauge($r3jq('.lightgauge[sensorlocation=\''+sensorobj.location+'\']').get()[0], "Light "+sensorobj.location, sensorobj.value, {redFrom: 950, redTo: 1024,yellowFrom:0, yellowTo: 200,minorTicks: 4, min:0, max:1024});
       });
       sensorsdiv+='</div>';
     }
@@ -388,11 +369,73 @@ function writeAnwesenheitStatus(data)
       }
     }
   }
+
+  ////////// Anwesenheitsstatus Haupttding SpaceApi
+  if (data.state.open)
+  {
+   iconuri=data.state.icon.open;
+   statuscolor=r3colorstatus_open;
+   //If space1empty2 in sensor.data
+   if (typeof space1empty !== 'undefined' && typeof space2empty !== 'undefined')
+   {
+    //if people ONLY in space2
+    if (space1empty === true && space2empty === false)
+    {
+      statuscolor=r3colorstatus_barelyopen;
+    }
+   }
+  }
+  else
+  {
+   iconuri=data.state.icon.closed;
+   statuscolor=r3colorstatus_closed;
+  }
+
+  if (statusage > 600)
+  {
+    //var statusagestatus = '<tr style="height:5px; overflow:hidden; "><td colspan="2"></td><td style="text-align:right; font-size:5%; background:red;">Status older than ' + siNumberString(statusage,"s") + '</td></tr>';
+    var statusagestatus = '<br/><div style="text-align:right; float:right; margin:0; padding:1px; line-height:105%; font-size:65%; background:red;">Status older than ' + siNumberString(statusage,"s") + '</div>';
+  }
+  if (anwesenheit_status_kiosk)
+  {
+    var newhtml = '<table border="0" cellpadding="0" cellspacing="0" width="100%" height="100">';
+    newhtml += '<tr><td style="width:100px;" rowspan="2"><img style="float:left;" src="'+iconuri+'" height="100" width="100"/></td><td style="width:4px;" rowspan="2"></td><td colspan="2" class="anwesenheitsstatus" style="background-color:'+statuscolor+'; ">'+data.state.message+'</td></tr>';
+    newhtml += '<tr><td class="subspaceanwesenheitsstatus" style="background-color:'+((!space1empty)?r3colorstatus_open:r3colorstatus_closed)+'; ">Wohnung 1</td><td class="subspaceanwesenheitsstatus" style="background-color:'+((!space2empty)?r3colorstatus_open:r3colorstatus_closed)+'; ">Wohnung 2</td></tr>';
+    newhtml += '</table>';
+    anwesenheit_status_kiosk.innerHTML = newhtml
+  }
+  if (anwesenheit_status_frontpage)
+  {
+    //anwesenheit_status_frontpage.innerHTML='<table border="0" cellpadding="0" cellspacing="0" width="100%" height="42"><tr><td style="width:42px;"><img style="float:left;" src="'+iconuri+'" height="42" width="42"/></td><td style="width:4px;"></td><td style="background-color:'+statuscolor+'; height:42px; text-align:center; margin-left:48px; margin-right:auto; font-size:larger; font-weight:bold; vertical-align:middle; display:table-cell;">'+data.status+'</td></tr>'+statusagestatus+'</table>';
+    //anwesenheit_status_frontpage.innerHTML='<table border="0" cellpadding="0" cellspacing="0" style="padding:0; margin:0: height:42px; width:100%;"><tr><td style="width:42px;"><img style="float:left;" src="'+iconuri+'" height="42" width="42"/></td><td style="width:4px;"></td><td style="background-color:'+statuscolor+'; height:42px; text-align:center; margin-left:48px; margin-right:auto; font-size:larger; font-weight:bold; vertical-align:middle; display:table-cell;">'+data.status+statusagestatus+'</td></tr></table>';
+    //anwesenheit_status_frontpage.innerHTML='<table border="0" cellpadding="0" cellspacing="0" style="padding:0; margin:0: height:42px; width:100%;"><tr><td style="width:42px;"><img style="float:left;" src="'+iconuri+'" height="42" width="42"/></td><td style="width:4px;"></td><td style="background-color:'+statuscolor+'; height:42px; text-align:center; margin-left:48px; margin-right:auto; font-size:larger; font-weight:bold; vertical-align:middle; display:table-cell;">'+data.status+statusagestatus+'</td></tr></table>';
+    var newhtml = '<div style="width:100%;">';
+      newhtml += '<div style="float:left;">'
+        newhtml += '<img src="'+iconuri+'" height="60" width="60"/>';
+      newhtml += '</div>';
+      newhtml += '<div style="float:left; margin-left:12px;">'
+        newhtml += '<div style="background-color:'+statuscolor+'; height:42px; line-height:42px; padding-left:2em; padding-right:2em; text-align:center; vertical-align: middle; margin-right:auto; font-size:larger; font-weight:bold;">'+data.state.message+statusagestatus;
+        newhtml += '</div>';
+        newhtml += '<div style="height:18px; line-height:18px;">';
+          newhtml += '<div style="float:left; width:50%; border-top:1px solid black; border-right:1px solid right; background-color:'+((!space1empty)?r3colorstatus_open:r3colorstatus_closed)+'; height:18px; line-height:18px; text-align:center; vertical-align: middle; margin-right:auto; font-size:smaller;">Wohnung 1';
+          newhtml += '</div>';
+          newhtml += '<div style="float:left; width:50%; border-top:1px solid black; background-color:'+((!space2empty)?r3colorstatus_open:r3colorstatus_closed)+'; height:18px; line-height:18px; text-align:center; vertical-align: middle; margin-right:auto; font-size:smaller;">Wohnung 2';
+          newhtml += '</div>';
+        newhtml += '</div>';
+      newhtml += '</div>';
+    newhtml += '</div>';
+    anwesenheit_status_frontpage.innerHTML = newhtml
+  }
 }
 
 function updateAnwesenheitStatus()
 {
- url = "//status.realraum.at/spaceapi.json";
+ // Future URL
+ //url = "//status.realraum.at/spaceapi.json";
+ // Old URL
+ url = "//www.realraum.at/status.json";
+ // Test URL
+ // url = "/status.json";
  var jqxhr = $r3jq.getJSON(url, writeAnwesenheitStatus);
 }
 
@@ -525,11 +568,6 @@ $r3jq(document).ready(function()
   {
     loadCalendarMainPage();
     setInterval("loadCalendarMainPage()", 123*1000);
-  }
-  if (document.getElementById("gplusevents"))
-  {
-    loadGooglePlusEvents();
-    setInterval("loadGooglePlusEvents()", 1207*1000);
   }
   if (document.getElementById("vistemperature"))
   {
