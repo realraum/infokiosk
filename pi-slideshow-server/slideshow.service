@@ -3,6 +3,7 @@ Description=Display slideshow
 Wants=network.target
 
 [Service]
+MemoryLimit=350M
 Nice=10
 Type=forking
 Restart=always
