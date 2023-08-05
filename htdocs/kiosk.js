@@ -366,7 +366,7 @@ function writeAnwesenheitStatus(data)
       $r3jq.each( data.sensors.ext_3dprinter_progress, function(s, sensorobj) {
         var progress = sensorobj.value;
         progress += sensorobj.unit;
-        if (sensorobj.job) {progress += "("+sensorobj.job+")";}
+        if (sensorobj.job) {progress += " ("+sensorobj.job+")";}
         sensorsdiv+='<br/>'+sensorobj.name+': '+progress+'</div>';
       });
       sensorsdiv+='</div>';
