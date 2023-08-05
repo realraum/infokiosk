@@ -360,6 +360,17 @@ function writeAnwesenheitStatus(data)
       });
       sensorsdiv+='</div>';
     }
+    if (data.sensors.ext_3dprinter_progress)
+    {
+      sensorsdiv+='<div class="sensorstatus"><b><u>3D Drucker</u></b>';
+      $r3jq.each( data.sensors.ext_3dprinter_progress, function(s, sensorobj) {
+        var progress = sensorobj.value;
+        progress += sensorobj.unit;
+        if (sensorobj.job) {progress += "("+sensorobj.job+")";}
+        sensorsdiv+='<br/>'+sensorobj.name+': '+progress+'</div>';
+      });
+      sensorsdiv+='</div>';
+    }
     if (sensorsdiv != "")
     {
       sensorshtml='<div style="width:100%; display:inline-block;">'+sensorsdiv;
