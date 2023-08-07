@@ -367,7 +367,7 @@ function writeAnwesenheitStatus(data)
         var progress = sensorobj.value;
         progress += sensorobj.unit;
         if (sensorobj.job) {progress += " ("+sensorobj.job+")";}
-        sensorsdiv+='<br/>'+sensorobj.name+': '+progress+'</div>';
+        sensorsdiv+='<br/><div>'+sensorobj.name+': '+progress+'</div>';
       });
       sensorsdiv+='</div>';
     }
