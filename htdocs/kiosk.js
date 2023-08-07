@@ -356,7 +356,7 @@ function writeAnwesenheitStatus(data)
       $r3jq.each( data.sensors.ext_lasercutter_hot, function(s, sensorobj) {
         var use = "NotInUse";
         if (sensorobj.value) {use="InUse";}
-        sensorsdiv+='<br/>'+sensorobj.location+': '+use+'</div>';
+        sensorsdiv+='<br/>'+sensorobj.location+': '+use+'';
       });
       sensorsdiv+='</div>';
     }
@@ -367,7 +367,7 @@ function writeAnwesenheitStatus(data)
         var progress = sensorobj.value;
         progress += sensorobj.unit;
         if (sensorobj.job) {progress += " ("+sensorobj.job+")";}
-        sensorsdiv+='<br/><div>'+sensorobj.name+': '+progress+'</div>';
+        sensorsdiv+='<br/>'+sensorobj.name+': '+progress+'';
       });
       sensorsdiv+='</div>';
     }
