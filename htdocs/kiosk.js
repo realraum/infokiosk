@@ -148,8 +148,8 @@ function calendarItemEnhancer(data)
 function loadCalendarKiosk()
 {
   var calcontainer=document.getElementById("grical_upcoming_kiosk");
-  //$r3jq.getJSON('/shmcache/grical_realraum.json', function(data){
-  $r3jq.getJSON('//realraum.at/shmcache/grical_realraum.json', function(data){
+  //$r3jq.getJSON('//realraum.at/shmcache/grical_realraum.json', function(data){
+  $r3jq.getJSON('//status.realraum.at/ics/grical_realraum.json', function(data){
     var calhtml = "";
     $r3jq.each(calendarItemEnhancer(data), function(index, itm) {
       calhtml += '<li class="level1">'+itm.when+' - <span class="r3red">'+itm.title+'</span></li>'+"\n";
@@ -160,9 +160,9 @@ function loadCalendarKiosk()
 
 function loadCalendarMainPage()
 {
-  //old URI: //grical.realraum.at/s/?query=!realraum&limit=9&view=json
   var calcontainer=document.getElementById("grical_upcoming");
-  $r3jq.getJSON('//realraum.at/shmcache/grical_realraum.json', function(data){
+  //$r3jq.getJSON('//realraum.at/shmcache/grical_realraum.json', function(data){
+  $r3jq.getJSON('//status.realraum.at/ics/grical_realraum.json', function(data){
     var calhtml = "";
     $r3jq.each(calendarItemEnhancer(data), function(index, itm) {
       calhtml += '<li class="level1"><div class="li">'+itm.when+' - <a href="'+itm.url+'" class="urlextern" title="'+itm.title+'"  rel="nofollow">'+itm.title+'</a></div></li>'+"\n";
