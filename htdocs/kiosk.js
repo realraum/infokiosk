@@ -442,9 +442,9 @@ function writeAnwesenheitStatus(data)
 function updateAnwesenheitStatus()
 {
  // Future URL
- //url = "//status.realraum.at/spaceapi.json";
+ url = "//status.realraum.at/spaceapi.json";
  // Old URL
- url = "//realraum.at/status.json";
+ //url = "//realraum.at/status.json";
  // Test URL
  // url = "/status.json";
  var jqxhr = $r3jq.getJSON(url, writeAnwesenheitStatus);
