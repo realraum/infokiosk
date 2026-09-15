@@ -171,6 +171,210 @@ function loadCalendarMainPage()
   });
 }
 
+
+// RFC5545 line unfolding: CRLF/LF followed by space or tab joins with previous line
+function unfoldICS(text)
+{
+    return text.replace(/\r\n/g, "\n").replace(/\n[ \t]/g, "");
+}
+
+// unescape TEXT values (SUMMARY, DESCRIPTION, ...)
+function unescapeICSText(str)
+{
+    return (str||"").replace(/\\n/gi, " ").replace(/\\,/g, ",").replace(/\\;/g, ";").replace(/\\\\/g, "\\");
+}
+
+// parse a DTSTART/DTEND property line's value+params into {date: Date, allDay: bool}
+function parseICSDateValue(params, value)
+{
+    var allDay = /VALUE=DATE(?!-TIME)/i.test(params);
+    var m;
+    if (allDay && (m = value.match(/^(\d{4})(\d{2})(\d{2})$/))) {
+        return { date: new Date(+m[1], +m[2]-1, +m[3]), allDay: true };
+    }
+    if ((m = value.match(/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})(Z?)$/))) {
+        var d = m[7] === "Z"
+            ? new Date(Date.UTC(+m[1], +m[2]-1, +m[3], +m[4], +m[5], +m[6]))
+            : new Date(+m[1], +m[2]-1, +m[3], +m[4], +m[5], +m[6]); // floating/local, TZID ignored
+        return { date: d, allDay: false };
+    }
+    return { date: null, allDay: allDay };
+}
+
+// fetch + parse an ICS feed into [{title, url, start, allDay}]
+function loadLautiICSData(url, callback)
+{
+    $r3jq.ajax({
+        url: url,
+        dataType: 'text',
+        success: function(text){
+            var lines = unfoldICS(text).split("\n");
+            var events = [];
+            var cur = null;
+            for (var i=0; i<lines.length; i++)
+            {
+                var line = lines[i];
+                if (line === "BEGIN:VEVENT") { cur = {}; continue; }
+                if (line === "END:VEVENT") { if (cur) events.push(cur); cur = null; continue; }
+                if (!cur) continue;
+
+                var idx = line.indexOf(":");
+                if (idx === -1) continue;
+                var head = line.substring(0, idx);
+                var value = line.substring(idx+1);
+                var parts = head.split(";");
+                var name = parts[0].toUpperCase();
+                var params = parts.slice(1).join(";");
+
+                if (name === "SUMMARY") {
+                    cur.title = unescapeICSText(value);
+                } else if (name === "URL") {
+                    cur.url = value;
+                } else if (name === "DTSTART") {
+                    var parsed = parseICSDateValue(params, value);
+                    cur.start = parsed.date;
+                    cur.allDay = parsed.allDay;
+                }
+            }
+
+            var now = Date.now();
+            events = events.filter(function(e){
+                if (!e.start) return false;
+                if (e.allDay) {
+                    var endOfDay = new Date(e.start.getFullYear(), e.start.getMonth(), e.start.getDate()+1).getTime();
+                    return endOfDay > now; // keep today's/future all-day events
+                }
+                return e.start.getTime() > now - 6*60*60*1000;; // only keep future events and those not older than 6 hours
+            });
+
+            events.sort(function(a, b){ return a.start.getTime() - b.start.getTime(); });
+            callback(events);
+        }
+    });
+}
+
+
+// compute itm.when from itm.start (Date) / itm.allDay
+function icsItemEnhancer(data)
+{
+    for (var s=0; s<data.length; s++)
+    {
+        var when = "";
+        var dt = data[s].start;
+        var isNow = !data[s].allDay && Date.now() > dt.getTime();
+
+        if (isNow)
+        {
+            when = "JETZT";
+        }
+        else
+        {
+            var weekday = weekday2str(dt.getDay());
+            var month = dt.getMonth()+1;
+            var dayofmonth = dt.getDate();
+            if (data[s].allDay)
+            {
+                when = weekday + " " + dayofmonth+"."+month;
+            }
+            else
+            {
+                var hh = (dt.getHours()<10?"0":"")+dt.getHours();
+                var mm = (dt.getMinutes()<10?"0":"")+dt.getMinutes();
+                var stime = hh+":"+mm+":00";
+                while (stime.substring(stime.length-3,stime.length) == ":00")
+                {
+                    stime = stime.substring(0,stime.length-3);
+                }
+                if (stime.length <= 2) { stime += "h"; }
+                when = weekday + " " + dayofmonth+"."+month + ", " + stime;
+            }
+        }
+        data[s].when = when;
+    }
+    return data;
+}
+
+function loadLautiKiosk()
+{
+    var calcontainer = document.getElementById("laut_upcoming_kiosk");
+    loadLautiICSData('//status.realraum.at/ics/grical_realraum.ical', function(data){
+        var calhtml = "";
+        $r3jq.each(icsItemEnhancer(data), function(index, itm) {
+            calhtml += '<li class="level1">'+itm.when+' - <span class="r3red">'+itm.title+'</span></li>'+"\n";
+        });
+        calcontainer.innerHTML = '<ul>'+calhtml+'</ul>';
+    });
+}
+
+function loadLautiMainPage()
+{
+    var calcontainer = document.getElementById("laut_upcoming");
+    loadLautiICSData('//status.realraum.at/ics/grical_realraum.ical', function(data){
+        var calhtml = "";
+        $r3jq.each(icsItemEnhancer(data), function(index, itm) {
+            calhtml += '<li class="level1"><div class="li">'+itm.when+' - <a href="'+itm.url+'" class="urlextern" title="'+itm.title+'" rel="nofollow">'+itm.title+'</a></div></li>'+"\n";
+        });
+        calcontainer.innerHTML = '<ul>'+calhtml+'</ul>';
+    });
+}
+
+// fetch + parse the LAUTI RSS feed into a plain array of {title, url, pubDate, description}
+function loadLautiRssData(url, callback)
+{
+    $r3jq.ajax({
+        url: url,
+        dataType: 'xml',
+        success: function(xml){
+            var items = [];
+            $r3jq(xml).find("item").each(function(){
+                var $i = $r3jq(this);
+                items.push({
+                    title: $i.find("title").first().text(),
+                    url: $i.find("link").first().text(),
+                    pubDate: $i.find("pubDate").first().text(),
+                    description: $i.find("description").first().text()
+                });
+            });
+            callback(items);
+        }
+    });
+}
+
+// pubDate (RFC822) -> same "when" style as calendarItemEnhancer
+function lautiItemEnhancer(data)
+{
+    for (var s=0; s<data.length; s++)
+    {
+        var when = "";
+        var dt = new Date(data[s].pubDate);
+        if (!isNaN(dt.getTime()))
+        {
+            if (Date.now() > dt.getTime())
+            {
+                when = "JETZT";
+            }
+            else
+            {
+                var weekday = weekday2str(dt.getDay());
+                var month = dt.getMonth()+1;
+                var dayofmonth = dt.getDate();
+                var hh = (dt.getHours()<10?"0":"")+dt.getHours();
+                var mm = (dt.getMinutes()<10?"0":"")+dt.getMinutes();
+                var stime = hh+":"+mm+":00";
+                while (stime.substring(stime.length-3,stime.length) == ":00")
+                {
+                    stime = stime.substring(0,stime.length-3);
+                }
+                if (stime.length <= 2) { stime += "h"; }
+                when = weekday + " " + dayofmonth+"."+month + ", " + stime;
+            }
+        }
+        data[s].when = when;
+    }
+    return data;
+}
+
+
 var gauges = {}
 function drawGauge(targetelem, label, temp, options) {
     // Create and draw the visualization.
@@ -575,10 +779,20 @@ $r3jq(document).ready(function()
     loadCalendarKiosk();
     setInterval("loadCalendarKiosk()", 123*1000);
   }
+  if (document.getElementById("laut_upcoming_kiosk"))
+  {
+    loadLautiKiosk();
+    setInterval("loadLautiKiosk()", 123*1000);
+  }
   if (document.getElementById("grical_upcoming"))
   {
     loadCalendarMainPage();
     setInterval("loadCalendarMainPage()", 123*1000);
+  }
+  if (document.getElementById("laut_upcoming"))
+  {
+    loadLautiMainPage();
+    setInterval("loadLautiMainPage()", 123*1000);
   }
   if (document.getElementById("vistemperature"))
   {
