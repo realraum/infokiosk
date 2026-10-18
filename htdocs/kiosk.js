@@ -4,6 +4,8 @@ var r3colorstatus_open="lime";
 var r3colorstatus_barelyopen="olive";
 var r3colorstatus_closed="red";
 var r3colorstatus_unknown="gray";
+// fallback duration when a VEVENT has no DTEND (keeps the old "6 hours" spirit)
+var ICS_DEFAULT_DURATION_MS = 6*60*60*1000;
 
 function min(a,b)
 {
@@ -12,80 +14,6 @@ function min(a,b)
     else
         return a;
 }
-
-function writeGooglePlusEvents(data, elem)
-{
-  var ghtml = "";
-  //var gplusimgwidth = parseInt($r3jq('<table class="gplusimg" />').css("width"));
-  var gplusimgwidth = 495;
-  var minimgwidth=78;
-  for (var i=0; i< data.items.length; i++)
-  {
-    var item = data.items[i];
-    var noteobj = item.object;
-    var attach = noteobj.attachments;
-    var notetxt = noteobj.content;
-    var noteimgs = new Array();
-    if (attach)
-    {
-      for (var a=0; a<attach.length; a++)
-      {
-        if ( attach[a].objectType == "album")
-        {
-          for (var t=0; t<attach[a].thumbnails.length; t++)
-          {
-            noteimgs.push(attach[a].thumbnails[t].image.url);
-          }
-        }
-        else if ( attach[a].objectType == "photo" || attach[a].objectType == "video")
-        {
-          noteimgs.push(attach[a].image.url);
-        }
-        else if (attach[a].objectType == "event")
-        {
-          notetxt = "<b>" + attach[a].displayName+"</b><br/>"+notetxt;
-        }
-      }
-    }
-    ghtml += '<div class="gpluspost">'
-    ghtml += '<img class="gplusactor" src="'+item.actor.image.url+'"/><p class="gplustimestamp">'+item.updated.substring(0,16).replace("T"," ")+'</p>';
-    ghtml += '<p class="gplustxt">'+notetxt+'</p>';
-    if (noteimgs.length>0)
-    {
-      var bigimglimit;
-      ghtml += '<table class="gplusimg" cellspacing="0"><tr>';
-      if (noteimgs.length > 3)
-      {
-              var gplusimgmaxwidth = gplusimgwidth - (minimgwidth * ((noteimgs.length -1) / 3));
-          bigimglimit = "max-height:"+(minimgwidth*3)+"px; max-width:"+gplusimgmaxwidth+"px;"
-          ghtml += '<td><img class="gplusimg" style="'+bigimglimit+'" src="'+noteimgs[0]+'"/></td>';
-          for (var ni=1; ni<noteimgs.length; ni+=3)
-          {
-          ghtml += '<td>';
-          var niimax = min(noteimgs.length, ni+3);
-          for (var nii=ni; nii<niimax; nii++)
-          {
-            ghtml += '<img class="gplusimg" style="max-width:'+minimgwidth+'px; max-height:'+minimgwidth+'px;" src="'+noteimgs[nii]+'"/><br/>';
-          }
-              ghtml += '</td>';
-             }
-      }
-      else
-      {
-             var gplusimgmaxwidth = gplusimgwidth / noteimgs.length;
-         bigimglimit = "max-width:"+gplusimgmaxwidth+"px;"
-             for (var ni=0; ni<noteimgs.length; ni++)
-         {
-        ghtml += '<td><img class="gplusimg" style="'+bigimglimit+'" src="'+noteimgs[ni]+'"/></td>';
-         }
-      }
-      ghtml += '</tr></table>';
-    }
-    ghtml += '</div>';
-  }
-  elem.innerHTML=ghtml;
-}
-
 
 function weekday2str(dow)
 {
@@ -201,7 +129,17 @@ function parseICSDateValue(params, value)
     return { date: null, allDay: allDay };
 }
 
-// fetch + parse an ICS feed into [{title, url, start, allDay}]
+// effective end of an event as epoch ms.
+// NB: for all-day events DTEND is EXCLUSIVE (17.10. -> DTEND 20261018),
+//     so start+1day is the correct fallback there.
+function icsEventEndMs(e)
+{
+    if (e.end)   { return e.end.getTime(); }
+    if (e.start) { return e.start.getTime() + (e.allDay ? 24*60*60*1000 : ICS_DEFAULT_DURATION_MS); }
+    return 0;
+}
+
+// fetch + parse an ICS feed into [{title, url, start, end, allDay}]
 function loadLautiICSData(url, callback)
 {
     $r3jq.ajax({
@@ -213,38 +151,45 @@ function loadLautiICSData(url, callback)
             var cur = null;
             for (var i=0; i<lines.length; i++)
             {
-                var line = lines[i];
-                if (line === "BEGIN:VEVENT") { cur = {}; continue; }
-                if (line === "END:VEVENT") { if (cur) events.push(cur); cur = null; continue; }
-                if (!cur) continue;
+                var line = lines[i].replace(/\s+$/, "");
+                var sep = line.indexOf(":");
+                if (sep < 0) { continue; }
+                var namepart = line.substring(0, sep);          // NAME;PARAM=x;PARAM=y
+                var value    = line.substring(sep+1);
+                var name     = namepart.split(";")[0].toUpperCase();
 
-                var idx = line.indexOf(":");
-                if (idx === -1) continue;
-                var head = line.substring(0, idx);
-                var value = line.substring(idx+1);
-                var parts = head.split(";");
-                var name = parts[0].toUpperCase();
-                var params = parts.slice(1).join(";");
+                if (name == "BEGIN") {
+                    if (value.toUpperCase() == "VEVENT") {
+                        cur = {title:"", url:"", start:null, end:null, allDay:false};
+                    }
+                    continue;
+                }
+                if (name == "END") {
+                    if (value.toUpperCase() == "VEVENT" && cur && cur.start) { events.push(cur); }
+                    cur = null;
+                    continue;
+                }
+                if (!cur) { continue; }
 
                 if (name === "SUMMARY") {
                     cur.title = unescapeICSText(value);
                 } else if (name === "URL") {
                     cur.url = value;
                 } else if (name === "DTSTART") {
-                    var parsed = parseICSDateValue(params, value);
+                    var parsed = parseICSDateValue(namepart, value);
                     cur.start = parsed.date;
                     cur.allDay = parsed.allDay;
+                } else if (name === "DTEND") {
+                    var q = parseICSDateValue(namepart, value);
+                    cur.end    = q.date;
+                    cur.allDay = cur.allDay || q.allDay;
                 }
             }
 
-            var now = Date.now();
+            var now = (new Date()).getTime();
             events = events.filter(function(e){
-                if (!e.start) return false;
-                if (e.allDay) {
-                    var endOfDay = new Date(e.start.getFullYear(), e.start.getMonth(), e.start.getDate()+1).getTime();
-                    return endOfDay > now; // keep today's/future all-day events
-                }
-                return e.start.getTime() > now - 6*60*60*1000;; // only keep future events and those not older than 6 hours
+                if (!e.start) { return false; }
+                return icsEventEndMs(e) > now;
             });
 
             events.sort(function(a, b){ return a.start.getTime() - b.start.getTime(); });
@@ -253,15 +198,17 @@ function loadLautiICSData(url, callback)
     });
 }
 
-
-// compute itm.when from itm.start (Date) / itm.allDay
+// compute itm.when from itm.start (Date) / itm.end (Date) / itm.allDay
 function icsItemEnhancer(data)
 {
+    var now = (new Date()).getTime();
     for (var s=0; s<data.length; s++)
     {
         var when = "";
         var dt = data[s].start;
-        var isNow = !data[s].allDay && Date.now() > dt.getTime();
+
+
+        var isNow = (dt.getTime() <= now) && (now < icsEventEndMs(data[s]));
 
         if (isNow)
         {
